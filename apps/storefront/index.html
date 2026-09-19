@@ -6,13 +6,23 @@
 <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<header class="nav"><a class="logo brand-lockup" href="#" aria-label="Trendskartco.in home"><img class="brand-logo-img" src="./assets/trendskartco-logo.jpg" alt="Trendskartco.in — Home Decor, Kitchen & Gadgets"></a><nav><a href="#shop">Shop</a><a href="#categories">Categories</a><a href="#orders">Track order</a></nav><button class="cart" id="cartBtn">Cart <b id="cartCount">0</b></button></header>
+<header class="nav"><a class="logo brand-lockup" href="#" aria-label="Trendskartco.in home"><img class="brand-logo-img" src="./assets/trendskartco-logo.jpg" alt="Trendskartco.in"></a><nav><a href="#shop">Shop</a><a href="#categories">Categories</a><a href="#orders">Track order</a></nav><button class="cart" id="cartBtn">Cart <b id="cartCount">0</b></button></header>
 <main>
-<section class="hero"><div class="hero-copy"><div class="brand-hero"><img src="./assets/trendskartco-logo.jpg" alt="Trendskartco.in — Home Decor, Kitchen & Gadgets"><div><span>Trendskartco.in</span><small>HOME DECOR · KITCHEN · GADGETS</small></div></div><p class="eyebrow">SMARTER SHOPPING · CURATED DAILY</p><h1>Useful things.<br><em>Better prices.</em></h1><p class="sub">Discover everyday products selected for value, design and convenience.</p><a class="primary" href="#shop">Explore products</a></div><div class="hero-card"><span>Trending now</span><strong>Home & lifestyle</strong><small>Fresh picks added daily</small></div></section>
+<section class="hero">
+  <div class="hero-copy">
+    <div class="brand-stage">
+      <div class="brand-emblem"><img src="./assets/trendskartco-logo.jpg" alt="Trendskartco home decor, kitchen and gadgets emblem"></div>
+      <div class="brand-name">Trendskartco.in</div>
+      <div class="brand-categories"><span>HOME DECOR</span><span>KITCHEN</span><span>GADGETS</span><span>CLOTHING</span></div>
+    </div>
+    <h1>Useful things. <em>Better prices.</em></h1>
+  </div>
+</section>
 <section id="categories" class="chips" aria-label="Product categories"><button class="active" data-category="all">All</button><div id="categoryChips"></div></section>
-<section id="shop"><div class="section-head"><div><p class="eyebrow">CURATED STORE</p><h2>Popular picks</h2></div><input id="search" placeholder="Search products…"></div><div id="products" class="grid"></div></section>
+<section id="shop"><div class="section-head"><div></div><input id="search" placeholder="Search products…"></div><div id="products" class="grid"></div></section>
 <section id="orders" class="track"><div><p class="eyebrow">ORDER SUPPORT</p><h2>Track your order</h2><p>Enter your order ID to see the latest status.</p></div><div class="trackbox"><input id="orderId" placeholder="e.g. DRP-1024"><button class="primary" onclick="trackOrder()">Track</button><div id="trackResult"></div></div></section>
-</main><footer class="site-footer">
+</main>
+<footer class="site-footer">
   <div class="footer-brand">
     <a class="footer-logo" href="./index.html">trendskartco<span>.</span></a>
     <p>Everyday finds, thoughtfully curated.</p>
