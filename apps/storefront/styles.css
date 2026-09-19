@@ -58,3 +58,45 @@ body{font-family:'DM Sans',Inter,ui-sans-serif,system-ui,-apple-system,sans-seri
   .brand-hero span{font-size:22px}
   .brand-hero small{font-size:7px}
 }
+
+/* Final branded landing composition */
+.nav .brand-logo-img{width:112px;height:54px;border-radius:0;object-fit:contain;object-position:center;box-shadow:none;background:transparent}
+.hero{min-height:520px;padding:58px 6% 52px;display:flex;align-items:center;justify-content:center;text-align:center;background:#eeece5}
+.hero-copy{max-width:1100px;width:100%}
+.brand-stage{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.brand-emblem{width:min(390px,82vw);height:170px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;margin-bottom:10px}
+.brand-emblem img{width:390px;height:auto;max-width:none;border-radius:0;box-shadow:none;background:#fff;display:block}
+.brand-name{font-family:'Pacifico',cursive;font-size:clamp(38px,5vw,62px);line-height:1;color:#141414;letter-spacing:.2px;margin-top:-2px}
+.brand-categories{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 22px;margin-top:12px;color:#6f6f6f;font-size:11px;font-weight:900;letter-spacing:2px}
+.brand-categories span{white-space:nowrap}
+.hero h1{font-size:clamp(50px,7vw,82px);line-height:1;letter-spacing:-4px;margin:42px 0 0}
+.hero h1 em{font-style:normal;color:#7655f5}
+.hero-card{display:none}
+.section-head{padding:18px 7% 14px;min-height:0}
+.section-head input{margin-left:auto}
+#shop{padding-top:0}
+#shop .section-head>div{display:none}
+.chips{padding:24px 7%;justify-content:center}
+.grid{padding-top:10px}
+@media(max-width:800px){
+  .nav .brand-logo-img{width:92px;height:48px}
+  .hero{min-height:510px;padding:45px 5% 42px}
+  .brand-emblem{width:min(330px,88vw);height:145px}
+  .brand-emblem img{width:330px}
+  .brand-name{font-size:42px}
+  .brand-categories{gap:8px 13px;font-size:9px;letter-spacing:1.4px}
+  .hero h1{font-size:52px;letter-spacing:-3px;margin-top:34px}
+}
+@media(max-width:480px){
+  .nav{height:64px;padding:0 4%}
+  .nav .brand-logo-img{width:82px;height:44px}
+  .hero{min-height:470px}
+  .brand-emblem{width:300px;height:132px}
+  .brand-emblem img{width:300px}
+  .brand-name{font-size:34px}
+  .brand-categories{font-size:8px;letter-spacing:1.1px;gap:7px 11px}
+  .hero h1{font-size:43px;line-height:.98;letter-spacing:-2.5px;margin-top:30px}
+  .chips{padding:18px 5%;justify-content:flex-start;flex-wrap:nowrap}
+  #shop .section-head{padding:10px 5% 10px}
+  .section-head input{width:100%}
+}
