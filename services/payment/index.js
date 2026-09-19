@@ -1,0 +1,1 @@
+export class PaymentGateway{constructor(provider){this.provider=provider}async createPayment(){throw new Error("PAYMENT_PROVIDER_NOT_CONFIGURED")}async verifyPayment(){throw new Error("PAYMENT_PROVIDER_NOT_CONFIGURED")}async refund(){throw new Error("PAYMENT_PROVIDER_NOT_CONFIGURED")}}export function supportedMethods(){return ["UPI","CARD","COD"]}
