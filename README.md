@@ -2,22 +2,35 @@
 
 India-first automated ecommerce platform with a premium customer storefront, owner dashboard and provider-neutral fulfillment automation.
 
-## Current strategy
-**Payment gateway is intentionally deferred until the final phase.** COD is the active checkout mode while commerce, operations, supplier and automation layers are completed.
+## Current build rule
+**Cashfree is deliberately the final phase.** All non-payment commerce, operations, automation, AI-support and launch-readiness work is built and tested before payment credentials are introduced.
 
-## Architecture
-- `apps/storefront` — customer shopping experience
-- `apps/admin` — owner operations dashboard
-- `services/supplier-adapter` — authorized supplier integration boundary
-- `services/payment` — reserved for final Cashfree integration
-- `docs/` — automation and launch plan
+## Built
+- Customer storefront, cart, checkout and account/order history
+- Supabase Auth + RLS data layer
+- COD order flow and order lifecycle
+- 101-product demo catalogue
+- 45 demo customers and 120 demo orders
+- Owner dashboard with Orders, Products, Customers, Returns/RTO, Analytics, Automation, Settings and Action Center
+- Supplier adapter with authorized-provider boundary and manual fallback
+- Provider-neutral shipping/tracking adapter
+- Notification queue architecture
+- Grounded support assistant with escalation
+- Scheduled operations monitor every 10 minutes
+- Customer policy pages
+- GitHub Pages deployment workflow
+- Security/RLS foundations
 
-## Launch sequence
-1. Commerce UX and order lifecycle
-2. Supplier/fulfillment automation
-3. Tracking, returns, RTO and notifications
-4. Admin analytics and AI support
-5. Security + end-to-end QA
-6. Cashfree payment integration and production launch
+## Non-payment production integrations
+The remaining external integrations use provider-neutral adapters so an authorized supplier, courier, messaging or AI provider can be connected without redesigning the core commerce system.
 
-Cashfree's current web flow uses server-side order creation, JS checkout, server-side payment verification and signed webhooks; we will activate it only in the final phase.
+## Final payment phase
+Cashfree will be activated only after non-payment QA is complete:
+1. Merchant activation/credentials
+2. Sandbox checkout
+3. Signed webhook verification
+4. Refund test
+5. Production credentials
+6. Production payment smoke test
+
+Never expose secret keys in browser code or Git. Supplier automation must use only an authorized API or user-assisted workflow; no CAPTCHA bypass, anti-bot evasion, credential/session extraction or unauthorized scraping.
