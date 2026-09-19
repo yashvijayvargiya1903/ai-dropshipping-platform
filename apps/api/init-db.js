@@ -1,0 +1,1 @@
+import fs from "node:fs";import {pool} from "./db.js";const sql=fs.readFileSync(new URL("./schema.sql",import.meta.url),"utf8");await pool.query(sql);await pool.end();console.log("DROP database initialized");
