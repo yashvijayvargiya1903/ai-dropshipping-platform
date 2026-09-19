@@ -28,3 +28,9 @@ body{font-family:'DM Sans',Inter,ui-sans-serif,system-ui,-apple-system,sans-seri
 .footer-links a span{color:#ff8fcf;font-size:17px}
 .footer-note{color:#988ba7;font-size:12px;white-space:nowrap}
 @media(max-width:700px){.site-footer{grid-template-columns:1fr;padding:42px 6% 25px;gap:25px}.footer-logo{font-size:34px}.footer-note{white-space:normal}}
+
+.brand-lockup{display:inline-flex;align-items:center;gap:9px;color:#171717}
+.brand-mark{width:30px;height:30px;border:1.5px solid #171717;border-radius:9px;display:grid;place-items:center;font-size:20px;line-height:1}
+.brand-script{font-family:'Pacifico',cursive;font-size:22px;letter-spacing:0;color:#171717}
+.brand-script span{color:#9b62e8}
+.footer-logo{font-family:'Pacifico',cursive}
