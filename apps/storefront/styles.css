@@ -126,3 +126,9 @@ body{font-family:'DM Sans',Inter,ui-sans-serif,system-ui,-apple-system,sans-seri
  .brand-category-row a{font-size:12px}
  .hero-title h1{font-size:46px;letter-spacing:-3px}
 }
+
+
+/* Final header/logo cleanup */
+.nav .brand-logo-img{width:138px;height:auto;max-height:50px;border-radius:0;object-fit:contain;box-shadow:none;background:transparent}
+@media(max-width:800px){.nav .brand-logo-img{width:108px;max-height:46px}}
+@media(max-width:480px){.nav .brand-logo-img{width:94px;max-height:42px}}
