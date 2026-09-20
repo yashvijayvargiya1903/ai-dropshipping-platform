@@ -13,6 +13,8 @@ India-first automated ecommerce platform with a premium customer storefront, own
 - 101-product catalogue
 - 45 demo customers and 120 demo orders
 - Owner dashboard with Orders, Products, Customers, Returns/RTO, Analytics, Automation, Settings and Action Center
+- Owner/admin route guard with authenticated redirect and live Supabase order management
+- Admin product creation, price editing, inventory editing and activation controls
 - Supplier adapter with authorized-provider boundary and safe manual fallback
 - Provider-neutral shipping/tracking adapter
 - Notification queue architecture for email, SMS, WhatsApp and in-app delivery
