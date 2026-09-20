@@ -1,36 +1,40 @@
-# AI Dropshipping Platform
+# Trendskartco — Automated Ecommerce Platform
 
-India-first automated ecommerce platform with a premium customer storefront, owner dashboard and provider-neutral fulfillment automation.
+India-first automated ecommerce platform with a premium customer storefront, owner dashboard and provider-neutral operations automation.
 
-## Current build rule
-**Cashfree is deliberately the final phase.** All non-payment commerce, operations, automation, AI-support and launch-readiness work is built and tested before payment credentials are introduced.
+## Build rule
+**Cashfree is deliberately the final phase.** All non-payment application work is completed before payment credentials are introduced.
 
-## Built
-- Customer storefront, cart, checkout and account/order history
+## Completed
+- Premium Trendskartco customer storefront, cart, account and checkout
 - Supabase Auth + RLS data layer
 - COD order flow and order lifecycle
-- 101-product demo catalogue
+- Authoritative checkout price/stock validation
+- 101-product catalogue
 - 45 demo customers and 120 demo orders
 - Owner dashboard with Orders, Products, Customers, Returns/RTO, Analytics, Automation, Settings and Action Center
-- Supplier adapter with authorized-provider boundary and manual fallback
+- Supplier adapter with authorized-provider boundary and safe manual fallback
 - Provider-neutral shipping/tracking adapter
-- Notification queue architecture
+- Notification queue architecture for email, SMS, WhatsApp and in-app delivery
 - Grounded support assistant with escalation
 - Scheduled operations monitor every 10 minutes
-- Customer policy pages
-- GitHub Pages deployment workflow
-- Security/RLS foundations
+- Shipping/returns/refund, privacy and terms foundation pages
+- GitHub Pages deployment workflow with custom-domain artifact
+- Smoke QA workflow and production-readiness documentation
+- Security/RLS foundations and payment-event idempotency model
 
-## Non-payment production integrations
-The remaining external integrations use provider-neutral adapters so an authorized supplier, courier, messaging or AI provider can be connected without redesigning the core commerce system.
+## External activation boundaries
+The application is structured so authorized supplier, courier, messaging and AI providers can be added without redesigning the core system. Provider credentials are intentionally not hardcoded into the repository.
 
-## Final payment phase
-Cashfree will be activated only after non-payment QA is complete:
-1. Merchant activation/credentials
+Supplier automation must use only an authorized API or user-assisted workflow. No CAPTCHA bypass, anti-bot evasion, credential/session extraction or unauthorized scraping.
+
+## Final payment phase — Cashfree
+Only after the non-payment build is ready:
+1. Merchant activation and credentials
 2. Sandbox checkout
 3. Signed webhook verification
 4. Refund test
 5. Production credentials
 6. Production payment smoke test
 
-Never expose secret keys in browser code or Git. Supplier automation must use only an authorized API or user-assisted workflow; no CAPTCHA bypass, anti-bot evasion, credential/session extraction or unauthorized scraping.
+Never expose secret keys in browser code or Git.
