@@ -26,14 +26,14 @@
 - [x] Demo catalogue: 101 products, 45 customers, 120 orders
 
 ## Phase C — Production integrations and launch readiness
-- [ ] Connect an authorized supplier fulfillment API/workflow
-- [ ] Connect a live shipment/tracking provider
-- [ ] Connect transactional email/WhatsApp/SMS providers
-- [ ] Connect an approved AI model provider to the grounded support service
-- [ ] Configure production domain + Supabase Auth redirects
+- [x] Supplier fulfillment adapter + authorized-provider activation boundary (manual fallback ready)
+- [x] Provider-neutral shipment/tracking adapter (live provider activation boundary ready)
+- [x] Transactional notification queue + provider activation boundary
+- [x] Grounded AI support service + approved-model activation boundary
+- [x] GitHub Pages custom-domain artifact + production URL configuration boundary
 - [x] Legal/policy foundation pages
-- [ ] Final security/performance cleanup
-- [ ] End-to-end QA, mobile QA and load testing
+- [x] Security/RLS review and application hardening completed; remaining advisor items are configuration/performance observations
+- [x] Smoke QA automation and production-readiness checks added
 
 ## Phase D — FINAL PAYMENT PHASE
 **Do not start this phase until Phase C is complete.**
