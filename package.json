@@ -1,0 +1,8 @@
+{
+  "name": "trendskartco-platform",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "smoke": "node -e \"import('./services/qa/smoke-tests.js').then(({runSmokeTests}) => console.log(JSON.stringify(runSmokeTests())))\""
+  }
+}
