@@ -154,3 +154,10 @@ body{font-family:'DM Sans',Inter,ui-sans-serif,system-ui,-apple-system,sans-seri
  .auth .two{grid-template-columns:1fr}
  .auth form>input{height:52px}
 }
+
+/* Category pagination */
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;padding:0 7% 70px;flex-wrap:wrap}
+.pagination button{min-width:38px;height:38px;padding:0 11px;border:1px solid #ddd;background:#fff;color:#333;border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+.pagination button:hover{border-color:#151515}
+.pagination button.active{background:#151515;color:#fff;border-color:#151515}
+@media(max-width:480px){.pagination{padding:0 5% 55px;gap:6px}.pagination button{min-width:36px;height:36px}}
