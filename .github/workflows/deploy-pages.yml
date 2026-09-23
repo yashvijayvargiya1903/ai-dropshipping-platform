@@ -27,8 +27,6 @@ jobs:
           mkdir -p _site/admin
           cp -R apps/storefront/. _site/
           cp -R apps/admin/. _site/admin/
-          mkdir -p _site/lead-launch-demo
-          cp -R lead-launch-demo/. _site/lead-launch-demo/
           touch _site/.nojekyll
           if [ -f CNAME ]; then cp CNAME _site/CNAME; fi
 
