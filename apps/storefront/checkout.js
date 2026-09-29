@@ -6,6 +6,11 @@ el("#items").innerHTML=cart.length?cart.map(p=>`<div class="sum"><span>${escapeH
 let total=cart.reduce((s,p)=>s+Number(p.p)*(Number(p.qty)||1),0);el("#total").textContent="Total "+money(total);
 async function token(){const {data:{session}}=await supabase.auth.getSession();return session?.access_token||null}
 async function verifyReturn(){const id=new URLSearchParams(location.search).get("cashfree_order_id");if(!id)return;const t=await token();if(!t)return;const r=await fetch("https://dpiecktmpduhlapnkwvq.supabase.co/functions/v1/cashfree-payments?order_id="+encodeURIComponent(id),{headers:{Authorization:"Bearer "+t}});const d=await r.json();if(d.paid){localStorage.removeItem("drop-cart");localStorage.removeItem("drop-coupon");el("#done").innerHTML=`<div class="success"><b>Payment successful · ${d.order_number}</b><span>Your payment was verified server-side and your order is confirmed.</span><a href="./index.html">Continue shopping</a></div>`;el("#form").style.display="none"}else el("#done").innerHTML="<div class=\"success\"><b>Payment status: pending</b><span>We are verifying the payment. Please refresh in a few seconds.</span></div>"}
+// Keep delivery/payment selections if the customer refreshes checkout in this tab.
+const form=el("#form");
+try{const saved=JSON.parse(sessionStorage.getItem("checkout-form")||"{}");for(const [name,value] of Object.entries(saved)){const field=form.elements.namedItem(name);if(!field)continue;if(field instanceof RadioNodeList){for(const radio of field)radio.checked=radio.value===value;}else field.value=value;}}catch{}
+form.addEventListener("input",()=>{const values={};for(const [name,value] of new FormData(form))values[name]=value;try{sessionStorage.setItem("checkout-form",JSON.stringify(values))}catch{}});
+form.addEventListener("change",()=>{const values={};for(const [name,value] of new FormData(form))values[name]=value;try{sessionStorage.setItem("checkout-form",JSON.stringify(values))}catch{}});
 verifyReturn();
 el("#form").onsubmit=async e=>{
   e.preventDefault();
@@ -32,7 +37,7 @@ el("#form").onsubmit=async e=>{
   const order={order_number:"DRP-"+Date.now().toString().slice(-8),customer_id:customer.id,status:payment==="COD"?"COD_CONFIRMED":"PENDING_PAYMENT",payment_method:payment,payment_status:"PENDING",subtotal,discount,coupon_code:couponCode||null,shipping:0,total,shipping_address:{name:f.get("name"),mobile:f.get("mobile"),address:f.get("address"),city:f.get("city"),state:f.get("state"),pincode:f.get("pincode")}};
   const o=await supabase.from("orders").insert(order).select("id,order_number").single();if(o.error)return alert(o.error.message);
   const oi=await supabase.from("order_items").insert(lines.map(x=>({order_id:o.data.id,...x})));if(oi.error)return alert(oi.error.message);
-  if(payment==="COD"){localStorage.removeItem("drop-cart");el("#done").innerHTML=`<div class="success"><b>Order placed · ${o.data.order_number}</b><span>Cash on Delivery selected. We’ll confirm the order shortly.</span><a href="./index.html">Continue shopping</a></div>`;e.target.style.display="none";return}
+  if(payment==="COD"){localStorage.removeItem("drop-cart");localStorage.removeItem("drop-coupon");sessionStorage.removeItem("checkout-form");el("#done").innerHTML=`<div class="success"><b>Order placed · ${o.data.order_number}</b><span>Cash on Delivery selected. We’ll confirm the order shortly.</span><a href="./index.html">Continue shopping</a></div>`;e.target.style.display="none";return}
   const t=await token();if(!t)return location.href="./auth.html";
   const r=await fetch("https://dpiecktmpduhlapnkwvq.supabase.co/functions/v1/cashfree-payments",{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({order_id:o.data.id,origin:location.origin})});
   const g=await r.json();if(!r.ok)return alert(g.error||"Unable to start payment. Please try again.");
