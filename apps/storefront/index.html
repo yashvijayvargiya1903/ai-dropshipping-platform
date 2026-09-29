@@ -33,7 +33,7 @@
   </div>
   <div class="footer-note">© 2026 Trendskartco</div>
 </footer>
-<div id="drawer" class="drawer"><div class="drawer-head"><h3>Your cart</h3><button onclick="closeCart()">×</button></div><div id="cartItems"></div><div class="total"><span>Total</span><strong id="cartTotal">₹0</strong></div><button class="primary full" onclick="checkout()">Proceed to checkout</button></div>
+<div id="drawer" class="drawer"><div class="drawer-head"><h3>Your cart</h3><button onclick="closeCart()">×</button></div><div id="cartItems"></div><div class="cart-coupon"><label for="cartCoupon">Have a coupon?</label><div class="cart-coupon-row"><input id="cartCoupon" placeholder="Enter coupon code" autocomplete="off"><button type="button" onclick="applyCartCoupon()">Apply</button></div><small id="cartCouponMsg" aria-live="polite"></small></div><div class="total"><span>Final amount</span><strong id="cartTotal">₹0</strong></div><button class="primary full" onclick="checkout()">Proceed to checkout</button></div>
 <div id="overlay" class="overlay" onclick="closeCart()"></div>
 <script type="module" src="./app.js?v=searchvisible4"></script>
 </body></html>
