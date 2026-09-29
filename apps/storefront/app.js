@@ -3,7 +3,7 @@ const API_KEY="sb_publishable_WCj-w-p_KTzKoO9pDqGbVQ_ye8VdCOd";
 async function apiGet(path){const response=await fetch(API_URL+"/rest/v1/"+path,{headers:{apikey:API_KEY,Authorization:"Bearer "+API_KEY}});const body=await response.json().catch(()=>null);if(!response.ok)throw new Error(body?.message||("Database request failed ("+response.status+")"));return body;}
 
 const PAGE_SIZE=10;
-let products=[];
+let products=[];\nlet siteDiscounts=[];
 let cart=[];
 try {
   const saved=JSON.parse(localStorage.getItem("drop-cart")||"[]");
@@ -33,10 +33,10 @@ async function loadProducts(){
     let categories=[];
     try{categories=await apiGet("categories?select=id,name");}
     catch(categoryError){console.warn("Category labels unavailable; showing products under Other:",categoryError.message);}
-    const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));
+    const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));\n    try{siteDiscounts=await apiGet("site_discounts?select=discount_type,discount_value,scope,category_id,starts_at,ends_at&active=eq.true");}catch(e){siteDiscounts=[]}
     products=(data||[]).map(p=>({
       id:p.id,n:p.name,p:Number(p.selling_price),e:"🛍️",img:p.image_url||"",
-      stock:Math.max(0,Number(p.inventory_qty??0)),c:categoryMap.get(p.category_id)||"Other"
+      stock:Math.max(0,Number(p.inventory_qty??0)),categoryId:p.category_id,c:categoryMap.get(p.category_id)||"Other"
     }));
     renderCategories();
     render();
@@ -46,7 +46,7 @@ async function loadProducts(){
     productsNode.innerHTML='<div class="products-error"><strong>Products are temporarily unavailable.</strong><p>Please refresh the page in a moment.</p></div>';
   }
 }
-function filteredProducts(){
+function saleOff(p){const now=Date.now();const d=siteDiscounts.filter(x=>new Date(x.starts_at)<=now&&new Date(x.ends_at)>=now&&(x.scope==="all"||(x.scope==="category"&&x.category_id===p.categoryId))).slice(-1)[0];return d?Math.min(p.p,d.discount_type==="percent"?p.p*Number(d.discount_value)/100:Number(d.discount_value)):0}\nfunction salePrice(p){return Math.max(0,Math.round((p.p-saleOff(p))*100)/100)}\nfunction filteredProducts(){
   let list=currentCategory==="all"?products:products.filter(p=>p.c===currentCategory);
   if(searchQuery)list=list.filter(p=>p.n.toLowerCase().includes(searchQuery));
   return list;
@@ -58,7 +58,7 @@ function render(list=filteredProducts()){
   el("#products").innerHTML=pageItems.map(p=>{
     const qty=cart.find(x=>x.id===p.id)?.qty||0;
     const name=escapeHTML(p.n);
-    const image=p.img?'<img src="'+escapeHTML(p.img)+'" alt="'+name+'" loading="lazy">':p.e;
+    const sale=salePrice(p);const price=sale<p.p?`<div class="price"><del>${money(p.p)}</del> <strong>${money(sale)}</strong></div>`:`${price}`;\n    const image=p.img?'<img src="'+escapeHTML(p.img)+'" alt="'+name+'" loading="lazy">':p.e;
     const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':
       (qty===0?'<button type="button" class="add" data-add="'+p.id+'">Add to cart</button>':
       '<div class="qty-stepper"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'">−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div>');
@@ -82,8 +82,8 @@ window.changeQty=(id,delta)=>{
   const item=cart.find(x=>x.id===id),next=(item?.qty||0)+delta;
   if(next<0||next>p.stock)return;
   if(next===0)cart=cart.filter(x=>x.id!==id);
-  else if(item)item.qty=next;
-  else cart.push({...p,qty:next});
+  else if(item){item.qty=next;item.p=salePrice(p)}
+  else cart.push({...p,p:salePrice(p),originalPrice:p.p,qty:next});
   save();render();
 };
 function save(){
