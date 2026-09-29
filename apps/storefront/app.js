@@ -62,7 +62,7 @@ function render(list=filteredProducts()){
     const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':
       (qty===0?'<button type="button" class="add" data-add="'+p.id+'">Add to cart</button>':
       '<div class="qty-stepper"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'">−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div>');
-    return '<article class="card"><div class="pic">'+image+'</div><div class="card-body"><h3>'+name+'</h3><div class="price">'+money(p.p)+'</div>'+controls+'</div></article>';
+    return '<article class="card"><div class="pic">'+image+'</div><div class="card-body"><h3>'+name+'</h3>'+price+controls+'</div></article>';
   }).join("")||'<p class="empty-products">No products found in this category.</p>';
   renderPagination(totalPages);
 }
