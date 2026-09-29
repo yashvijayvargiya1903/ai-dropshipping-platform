@@ -274,4 +274,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 .drawer .total{margin-top:12px;padding:18px 0;border-top:1px solid #eeeae2;font-size:16px}
 .drawer .total strong{font-size:21px;letter-spacing:-.4px}
 @media(max-width:480px){.drawer{padding:20px}.drawer #cartItems{margin-bottom:20px}.drawer .cart-coupon{padding:16px 13px 13px}}
-\n/* Restore the cart before the storefront paints to avoid a homepage flash on refresh. */\nhtml.cart-restore .drawer{right:0;transition:none}\nhtml.cart-restore .overlay{display:block}\n
+
+/* Restore the cart before the storefront paints to avoid a homepage flash on refresh. */
+html.cart-restore .drawer{right:0;transition:none}
+html.cart-restore .overlay{display:block}
