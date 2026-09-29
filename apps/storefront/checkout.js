@@ -1,8 +1,8 @@
 import { supabase } from "./supabase.js";
 const cart=JSON.parse(localStorage.getItem("drop-cart")||"[]");
 const money=n=>"₹"+Number(n).toLocaleString("en-IN"), el=s=>document.querySelector(s);
-el("#items").innerHTML=cart.length?cart.map(p=>`<div class="sum"><span>${p.n}</span><b>${money(p.p)}</b></div>`).join(""):"<p>Your cart is empty.</p>";
-let total=cart.reduce((s,p)=>s+Number(p.p),0);el("#total").textContent="Total "+money(total);
+el("#items").innerHTML=cart.length?cart.map(p=>`<div class="sum"><span>${p.n} × ${Number(p.qty)||1}</span><b>${money(Number(p.p)*(Number(p.qty)||1))}</b></div>`).join(""):"<p>Your cart is empty.</p>";
+let total=cart.reduce((s,p)=>s+Number(p.p)*(Number(p.qty)||1),0);el("#total").textContent="Total "+money(total);
 async function token(){const {data:{session}}=await supabase.auth.getSession();return session?.access_token||null}
 async function verifyReturn(){const id=new URLSearchParams(location.search).get("cashfree_order_id");if(!id)return;const t=await token();if(!t)return;const r=await fetch("https://dpiecktmpduhlapnkwvq.supabase.co/functions/v1/cashfree-payments?order_id="+encodeURIComponent(id),{headers:{Authorization:"Bearer "+t}});const d=await r.json();if(d.paid){localStorage.removeItem("drop-cart");el("#done").innerHTML=`<div class="success"><b>Payment successful · ${d.order_number}</b><span>Your payment was verified server-side and your order is confirmed.</span><a href="./index.html">Continue shopping</a></div>`;el("#form").style.display="none"}else el("#done").innerHTML="<div class=\"success\"><b>Payment status: pending</b><span>We are verifying the payment. Please refresh in a few seconds.</span></div>"}
 verifyReturn();
@@ -15,7 +15,7 @@ el("#form").onsubmit=async e=>{
   const {data:live,error:liveError}=await supabase.from("products").select("id,name,selling_price,inventory_qty,active").in("id",ids);
   if(liveError)return alert(liveError.message);
   const byId=new Map((live||[]).map(p=>[p.id,p]));
-  const lines=[];for(const item of cart){const p=byId.get(item.id);if(!p||!p.active)return alert("One of the products is no longer available.");if(Number(p.inventory_qty||0)<1)return alert(`${p.name} is currently out of stock.`);lines.push({product_id:p.id,quantity:1,unit_price:Number(p.selling_price)})}
+  const lines=[];for(const item of cart){const p=byId.get(item.id);if(!p||!p.active)return alert("One of the products is no longer available.");const qty=Math.max(1,Number(item.qty)||1);if(Number(p.inventory_qty||0)<qty)return alert(`${p.name} has only ${Number(p.inventory_qty||0)} available. Please reduce the quantity.`);lines.push({product_id:p.id,quantity:qty,unit_price:Number(p.selling_price)})}
   total=lines.reduce((s,x)=>s+x.unit_price*x.quantity,0);el("#total").textContent="Total "+money(total);
   const f=new FormData(e.target),payment=f.get("payment");
   const cp={user_id:user.id,name:f.get("name"),mobile:f.get("mobile"),email:user.email};
