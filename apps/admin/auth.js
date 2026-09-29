@@ -1,4 +1,4 @@
-import { supabase } from "../storefront/supabase.js";
+import { supabase } from "../supabase.js";
 
 export async function requireOwner() {
   const { data: { user } } = await supabase.auth.getUser();
