@@ -1,13 +1,18 @@
 import { supabase } from "./supabase.js";
-const cart=JSON.parse(localStorage.getItem("drop-cart")||"[]");
+let cart=[];try{const saved=JSON.parse(localStorage.getItem("drop-cart")||"[]");cart=Array.isArray(saved)?saved.filter(p=>p&&typeof p.id==="string"&&Number.isFinite(Number(p.p))&&Number(p.p)>=0&&Number.isFinite(Number(p.qty))&&Number(p.qty)>0):[]}catch{cart=[]}
 const money=n=>"₹"+Number(n).toLocaleString("en-IN"), el=s=>document.querySelector(s);
-el("#items").innerHTML=cart.length?cart.map(p=>`<div class="sum"><span>${p.n} × ${Number(p.qty)||1}</span><b>${money(Number(p.p)*(Number(p.qty)||1))}</b></div>`).join(""):"<p>Your cart is empty.</p>";
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+el("#items").innerHTML=cart.length?cart.map(p=>`<div class="sum"><span>${escapeHTML(p.n)} × ${Number(p.qty)||1}</span><b>${money(Number(p.p)*(Number(p.qty)||1))}</b></div>`).join(""):"<p>Your cart is empty.</p>";
 let total=cart.reduce((s,p)=>s+Number(p.p)*(Number(p.qty)||1),0);el("#total").textContent="Total "+money(total);
 async function token(){const {data:{session}}=await supabase.auth.getSession();return session?.access_token||null}
 async function verifyReturn(){const id=new URLSearchParams(location.search).get("cashfree_order_id");if(!id)return;const t=await token();if(!t)return;const r=await fetch("https://dpiecktmpduhlapnkwvq.supabase.co/functions/v1/cashfree-payments?order_id="+encodeURIComponent(id),{headers:{Authorization:"Bearer "+t}});const d=await r.json();if(d.paid){localStorage.removeItem("drop-cart");el("#done").innerHTML=`<div class="success"><b>Payment successful · ${d.order_number}</b><span>Your payment was verified server-side and your order is confirmed.</span><a href="./index.html">Continue shopping</a></div>`;el("#form").style.display="none"}else el("#done").innerHTML="<div class=\"success\"><b>Payment status: pending</b><span>We are verifying the payment. Please refresh in a few seconds.</span></div>"}
 verifyReturn();
 el("#form").onsubmit=async e=>{
   e.preventDefault();
+  const submit=el('#form button[type="submit"]');
+  if(submit.disabled)return;
+  submit.disabled=true;const originalLabel=submit.textContent;submit.textContent="Please wait…";
+  try{
   if(!cart.length)return alert("Add a product first.");
   const {data:{user}}=await supabase.auth.getUser();if(!user){location.href="./auth.html";return}
   // Re-read product prices and stock from Supabase. Never trust localStorage prices for an order total.
