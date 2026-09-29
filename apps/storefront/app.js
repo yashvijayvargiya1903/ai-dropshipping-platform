@@ -6,6 +6,8 @@ const PAGE_SIZE=10;
 let products=[];
 let siteDiscounts=[];
 let cart=[];
+let appliedCoupon=localStorage.getItem('drop-coupon')||'';
+let couponDiscount=0;
 try {
   const saved=JSON.parse(localStorage.getItem("drop-cart")||"[]");
   cart=Array.isArray(saved)?saved.reduce((out,p)=>{
@@ -98,8 +100,26 @@ function save(){
     const name=escapeHTML(p.n),qty=Number(p.qty)||1;
     return '<div class="item"><div class="mini">'+(p.img?'<img src="'+escapeHTML(p.img)+'" alt="">':p.e)+'</div><div class="item-info"><b>'+name+'</b><div>'+money(p.p)+' each</div><div class="cart-qty"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'">−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div></div><strong class="item-subtotal">'+money(p.p*qty)+'</strong></div>';
   }).join(""):"<p>Your cart is empty.</p>";
-  el("#cartTotal").textContent=money(cart.reduce((sum,p)=>sum+p.p*(Number(p.qty)||1),0));
+  const subtotal=cart.reduce((sum,p)=>sum+p.p*(Number(p.qty)||1),0);
+  el("#cartTotal").textContent=money(Math.max(0,subtotal-couponDiscount))+(couponDiscount?" (saved "+money(couponDiscount)+")":"");
+  const couponInput=el("#cartCoupon");if(couponInput&&appliedCoupon)couponInput.value=appliedCoupon;
 }
+async function applyCartCoupon(){
+  const input=el("#cartCoupon"),msg=el("#cartCouponMsg"),code=(input?.value||"").trim().toUpperCase();
+  if(!code){appliedCoupon="";couponDiscount=0;localStorage.removeItem("drop-coupon");msg.textContent="";save();return}
+  try{
+    const rows=await apiGet("coupons?select=code,discount_type,discount_value,scope,category_id,min_order_value,max_discount,expires_at,active&code=eq."+encodeURIComponent(code)+"&active=eq.true");
+    const c=rows?.[0];if(!c)throw new Error("Invalid or inactive coupon code.");
+    if(c.expires_at&&c.expires_at<new Date().toISOString().slice(0,10))throw new Error("This coupon has expired.");
+    const subtotal=cart.reduce((s,p)=>s+p.p*(Number(p.qty)||1),0);
+    if(c.scope==="minimum"&&subtotal<Number(c.min_order_value||0))throw new Error("Minimum order value is ₹"+Number(c.min_order_value||0)+".");
+    let eligible=subtotal;
+    if(c.scope==="category"){const ids=cart.map(p=>p.id);const data=await apiGet("products?select=id,category_id&id=in.("+ids.join(",")+")");const cats=new Set(data.filter(p=>p.category_id===c.category_id).map(p=>p.id));eligible=cart.filter(p=>cats.has(p.id)).reduce((s,p)=>s+p.p*(Number(p.qty)||1),0);if(!eligible)throw new Error("Coupon does not apply to cart items.");}
+    let off=c.discount_type==="percent"?eligible*Number(c.discount_value)/100:Math.min(eligible,Number(c.discount_value));if(c.max_discount!=null)off=Math.min(off,Number(c.max_discount));
+    couponDiscount=Math.min(subtotal,Math.round(off*100)/100);appliedCoupon=code;localStorage.setItem("drop-coupon",code);msg.textContent="Coupon applied · You save ₹"+couponDiscount;save();
+  }catch(e){appliedCoupon="";couponDiscount=0;localStorage.removeItem("drop-coupon");msg.textContent=e.message;save()}
+}
+window.applyCartCoupon=applyCartCoupon;
 window.openCart=()=>{el("#drawer").classList.add("open");el("#overlay").classList.add("open")};
 window.closeCart=()=>{el("#drawer").classList.remove("open");el("#overlay").classList.remove("open")};
 window.checkout=()=>{if(!cart.length){alert("Please select at least one product.");return}location.href="./checkout.html"};
