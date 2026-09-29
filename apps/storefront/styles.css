@@ -278,3 +278,12 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 /* Restore the cart before the storefront paints to avoid a homepage flash on refresh. */
 html.cart-restore .drawer{right:0;transition:none}
 html.cart-restore .overlay{display:block}
+
+/* Cart modal isolation and scroll handling */
+html.cart-restore,html.cart-restore body{overflow:hidden!important}
+body.cart-open{position:fixed!important;overflow:hidden!important;width:100%!important;left:0!important;right:0!important}
+#overlay{z-index:1000!important;background:rgba(12,12,16,.62)!important;overscroll-behavior:contain}
+#drawer{z-index:1001!important;height:100vh;height:100dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch;display:block}
+#drawer.open{right:0!important}
+#drawer .drawer-head{position:sticky;top:0;z-index:2;background:#fff;padding:0 0 12px}
+#drawer .drawer-head button{position:relative;z-index:3;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
