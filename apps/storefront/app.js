@@ -64,14 +64,21 @@ function renderCategories(){
   });
 }
 
-window.add=id=>{const p=products.find(x=>x.id===id);if(p&&p.stock!==0){cart.push(p);save();openCart()}};
+window.changeQty=(id,delta)=>{
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const item=cart.find(x=>x.id===id),next=(item?.qty||0)+delta;
+  if(next<0||next>p.stock)return;
+  if(next===0)cart=cart.filter(x=>x.id!==id);
+  else if(item)item.qty=next;
+  else cart.push({...p,qty:next});
+  save();render();
+};
 function save(){
   localStorage.setItem("drop-cart",JSON.stringify(cart));
-  el("#cartCount").textContent=cart.length;
-  el("#cartItems").innerHTML=cart.length?cart.map((p,i)=>'<div class="item"><div class="mini">'+(p.img?'<img src="'+p.img+'" alt="">':p.e)+'</div><div><b>'+p.n+'</b><div>'+money(p.p)+'</div></div><button onclick="removeItem('+i+')">×</button></div>').join(""):"<p>Your cart is empty.</p>";
-  el("#cartTotal").textContent=money(cart.reduce((s,p)=>s+p.p,0));
+  el("#cartCount").textContent=cart.reduce((sum,p)=>sum+(Number(p.qty)||1),0);
+  el("#cartItems").innerHTML=cart.length?cart.map(p=>'<div class="item"><div class="mini">'+(p.img?'<img src="'+p.img+'" alt="">':p.e)+'</div><div class="item-info"><b>'+p.n+'</b><div>'+money(p.p)+' each</div><div class="cart-qty"><button type="button" aria-label="Decrease quantity" onclick="changeQty(\\''+p.id+'\\',-1)">−</button><span>'+p.qty+'</span><button type="button" aria-label="Increase quantity" onclick="changeQty(\\''+p.id+'\\',1)" '+(p.qty>=p.stock?'disabled':'')+'>+</button></div></div><strong class="item-subtotal">'+money(p.p*p.qty)+'</strong></div>').join(""):"<p>Your cart is empty.</p>";
+  el("#cartTotal").textContent=money(cart.reduce((sum,p)=>sum+p.p*p.qty,0));
 }
-window.removeItem=i=>{cart.splice(i,1);save()};
 window.openCart=()=>{el("#drawer").classList.add("open");el("#overlay").classList.add("open")};
 window.closeCart=()=>{el("#drawer").classList.remove("open");el("#overlay").classList.remove("open")};
 window.checkout=()=>location.href="./checkout.html";
