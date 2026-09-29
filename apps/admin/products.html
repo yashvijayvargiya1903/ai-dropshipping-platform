@@ -33,7 +33,20 @@
 @media(max-width:700px){.add-product-modal{padding:14px;gap:9px;width:calc(100vw - 24px)}.add-product-modal input{padding:10px;font-size:16px}.product-editor input{font-size:16px}}.product-status.active,.product-notice.success{color:#23834f}.product-notice.error{color:#b42318}
 @media(max-width:700px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product-summary-info{padding:9px 10px 7px}.product-summary-info strong{font-size:12px;min-height:33px}.edit-toggle{margin:0 10px 10px;padding:8px;font-size:12px}.product-editor{padding:14px;gap:9px;width:calc(100vw - 24px);max-height:88vh}.product-editor input{padding:8px 7px;font-size:12px}.field-pair{gap:6px}.product-actions{flex-direction:column}.product-actions button{width:100%}.product-toolbar{gap:8px}.product-toolbar button{white-space:nowrap;padding:10px;font-size:12px}}
 @media(max-width:380px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.product-thumb{aspect-ratio:1/1}.product-summary-info{padding:8px}.edit-toggle{margin:0 8px 8px}}
-</style></head>
+</style>
+<style>
+/* Keep every editable control in product editor at iOS-safe size. */
+@media(max-width:700px){
+  .product-editor input,
+  .product-editor select,
+  .product-editor textarea,
+  .add-product-modal input,
+  .add-product-modal select,
+  .add-product-modal textarea,
+  #search{font-size:16px!important;}
+}
+</style>
+</head>
 <body>
 <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open owner menu" aria-expanded="false">☰</button>
 <div class="sidebar-overlay" id="sidebarOverlay"></div><script src="./sidebar.js"></script>
