@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Trendskartco — Smart Shopping</title>
-<link rel="stylesheet" href="./styles.css?v=cart-restore-2">
+<link rel="stylesheet" href="./styles.css?v=products-fix-2">
 <script>try{if(location.hash==="#cart"||sessionStorage.getItem("storefront-cart-open")==="1")document.documentElement.classList.add("cart-restore")}catch(e){if(location.hash==="#cart")document.documentElement.classList.add("cart-restore")}</script>
 <style>html.cart-restore #drawer{right:0!important;transition:none!important}html.cart-restore #overlay{display:block!important}</style>
 </head>
@@ -35,7 +35,7 @@
   </div>
   <div class="footer-note">© 2026 Trendskartco</div>
 </footer>
-<div id="drawer" class="drawer"><div class="drawer-head"><h3>Your cart</h3><button onclick="closeCart()">×</button></div><div id="cartItems"></div><div class="cart-coupon"><label for="cartCoupon">Have a coupon?</label><div class="cart-coupon-row"><input id="cartCoupon" placeholder="Enter coupon code" autocomplete="off"><button type="button" onclick="applyCartCoupon()">Apply</button></div><small id="cartCouponMsg" aria-live="polite"></small></div><div class="total"><span>Final amount</span><strong id="cartTotal">₹0</strong></div><button class="primary full" onclick="checkout()">Proceed to checkout</button></div>
+<div id="drawer" class="drawer"><div class="drawer-head"><h3>Your cart</h3><button id="closeCartBtn" type="button" aria-label="Close cart">×</button></div><div id="cartItems"></div><div class="cart-coupon"><label for="cartCoupon">Have a coupon?</label><div class="cart-coupon-row"><input id="cartCoupon" placeholder="Enter coupon code" autocomplete="off"><button type="button" onclick="applyCartCoupon()">Apply</button></div><small id="cartCouponMsg" aria-live="polite"></small></div><div class="total"><span>Final amount</span><strong id="cartTotal">₹0</strong></div><button class="primary full" onclick="checkout()">Proceed to checkout</button></div>
 <div id="overlay" class="overlay" onclick="closeCart()"></div>
-<script type="module" src="./app.js?v=cart-overlay-3"></script>
+<script type="module" src="./app.js?v=products-fix-2"></script>
 </body></html>
