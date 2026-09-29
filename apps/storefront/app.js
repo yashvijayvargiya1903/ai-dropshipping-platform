@@ -1,69 +1,81 @@
 import { supabase } from "./supabase.js";
-let products=[]; const oldCart=JSON.parse(localStorage.getItem("drop-cart")||"[]"); let cart=oldCart.reduce((a,p)=>{const q=a.find(x=>x.id===p.id);if(q)q.qty+=(Number(p.qty)||1);else a.push({...p,qty:Math.max(1,Number(p.qty)||1)});return a},[]);
+
 const PAGE_SIZE=10;
+let products=[];
+let cart=[];
+try {
+  const saved=JSON.parse(localStorage.getItem("drop-cart")||"[]");
+  cart=Array.isArray(saved)?saved.reduce((out,p)=>{
+    if(!p?.id)return out;
+    const qty=Math.max(1,Number(p.qty)||1);
+    const found=out.find(x=>x.id===p.id);
+    if(found)found.qty+=qty;else out.push({...p,qty});
+    return out;
+  },[]):[];
+} catch { cart=[]; }
+
 let currentCategory="all";
 let currentPage=1;
 let searchQuery="";
 const el=s=>document.querySelector(s);
-const money=n=>"₹"+Number(n).toLocaleString("en-IN");
+const money=n=>"₹"+Number(n||0).toLocaleString("en-IN");
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 async function loadProducts(){
-  const {data,error}=await supabase.from("products")
-    .select("id,name,selling_price,image_url,inventory_qty,category:categories(name)")
-    .eq("active",true).order("created_at",{ascending:false});
-  if(error){console.error(error);products=[];el("#products").innerHTML="<p>Unable to load products right now.</p>";return;}
-  products=(data||[]).map(p=>({id:p.id,n:p.name,p:Number(p.selling_price),e:"🛍️",img:p.image_url||"",stock:Number(p.inventory_qty??0),c:p.category?.name||"Other"}));
-  renderCategories();
-  render();
-  save();
+  const productsNode=el("#products");
+  productsNode.innerHTML='<p class="products-loading">Loading products…</p>';
+  try{
+    // Fetch products independently of category relationships so a missing PostgREST
+    // relationship cannot prevent the entire catalogue from rendering.
+    const {data,error}=await supabase.from("products")
+      .select("id,name,selling_price,image_url,inventory_qty,category_id")
+      .eq("active",true).order("created_at",{ascending:false});
+    if(error)throw error;
+    const {data:categories, error:categoryError}=await supabase.from("categories").select("id,name");
+    if(categoryError)console.warn("Category labels unavailable:",categoryError.message);
+    const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));
+    products=(data||[]).map(p=>({
+      id:p.id,n:p.name,p:Number(p.selling_price),e:"🛍️",img:p.image_url||"",
+      stock:Math.max(0,Number(p.inventory_qty??0)),c:categoryMap.get(p.category_id)||"Other"
+    }));
+    renderCategories();
+    render();
+    save();
+  }catch(error){
+    console.error("Unable to load storefront products:",error);
+    productsNode.innerHTML='<div class="products-error"><strong>Products are temporarily unavailable.</strong><p>Please refresh the page in a moment.</p></div>';
+  }
 }
-
 function filteredProducts(){
   let list=currentCategory==="all"?products:products.filter(p=>p.c===currentCategory);
-  if(searchQuery) list=list.filter(p=>p.n.toLowerCase().includes(searchQuery));
+  if(searchQuery)list=list.filter(p=>p.n.toLowerCase().includes(searchQuery));
   return list;
 }
-
 function render(list=filteredProducts()){
   const totalPages=Math.max(1,Math.ceil(list.length/PAGE_SIZE));
   if(currentPage>totalPages)currentPage=totalPages;
   const pageItems=list.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
   el("#products").innerHTML=pageItems.map(p=>{
     const qty=cart.find(x=>x.id===p.id)?.qty||0;
-    const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':'<div class="qty-stepper"><button type="button" aria-label="Decrease quantity" onclick="changeQty(\\''+p.id+'\\',-1)" '+(qty===0?'disabled':'')+'>−</button><span>'+qty+'</span><button type="button" aria-label="Increase quantity" onclick="changeQty(\\''+p.id+'\\',1)" '+(qty>=p.stock?'disabled':'')+'>+</button></div>';
-    return '<article class="card"><div class="pic">'+(p.img?'<img src="'+p.img+'" alt="'+p.n+'" loading="lazy">':p.e)+'</div><div class="card-body"><h3>'+p.n+'</h3><div class="price">'+money(p.p)+'</div>'+controls+'</div></article>';
-  }).join("")||"<p>No products found.</p>";
+    const name=escapeHTML(p.n);
+    const image=p.img?'<img src="'+escapeHTML(p.img)+'" alt="'+name+'" loading="lazy">':p.e;
+    const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':
+      '<div class="qty-stepper"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'" '+(qty===0?'disabled':'')+'>−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div>';
+    return '<article class="card"><div class="pic">'+image+'</div><div class="card-body"><h3>'+name+'</h3><div class="price">'+money(p.p)+'</div>'+controls+'</div></article>';
+  }).join("")||'<p class="empty-products">No products found in this category.</p>';
   renderPagination(totalPages);
 }
 function renderPagination(totalPages){
-  const wrap=el("#pagination");
-  if(!wrap)return;
+  const wrap=el("#pagination");if(!wrap)return;
   if(totalPages<=1){wrap.innerHTML="";return}
-  let html="";
-  for(let i=1;i<=totalPages;i++){
-    html+='<button class="'+(i===currentPage?'active':'')+'" data-page="'+i+'">'+i+'</button>';
-  }
-  wrap.innerHTML=html;
-  wrap.querySelectorAll("button").forEach(b=>b.onclick=()=>{
-    currentPage=Number(b.dataset.page);
-    render();
-    document.querySelector("#shop")?.scrollIntoView({behavior:"smooth",block:"start"});
-  });
+  wrap.innerHTML=Array.from({length:totalPages},(_,i)=>'<button type="button" class="'+(i+1===currentPage?'active':'')+'" data-page="'+(i+1)+'" aria-current="'+(i+1===currentPage?'page':'false')+'">'+(i+1)+'</button>').join("");
 }
-
 function renderCategories(){
-  const wrap=el("#categoryChips"); if(!wrap)return;
+  const wrap=el("#categoryChips");if(!wrap)return;
   const cats=[...new Set(products.map(p=>p.c).filter(Boolean))];
-  wrap.innerHTML=cats.map(c=>'<button data-category="'+c+'">'+c+'</button>').join("");
-  document.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{
-    document.querySelectorAll(".chips button").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    currentCategory=b.dataset.category||"all";
-    currentPage=1;
-    render();
-  });
+  wrap.innerHTML=cats.map(c=>'<button type="button" data-category="'+escapeHTML(c)+'" class="'+(c===currentCategory?'active':'')+'">'+escapeHTML(c)+'</button>').join("");
+  el('#categories [data-category="all"]')?.classList.toggle("active",currentCategory==="all");
 }
-
 window.changeQty=(id,delta)=>{
   const p=products.find(x=>x.id===id);if(!p)return;
   const item=cart.find(x=>x.id===id),next=(item?.qty||0)+delta;
@@ -76,17 +88,37 @@ window.changeQty=(id,delta)=>{
 function save(){
   localStorage.setItem("drop-cart",JSON.stringify(cart));
   el("#cartCount").textContent=cart.reduce((sum,p)=>sum+(Number(p.qty)||1),0);
-  el("#cartItems").innerHTML=cart.length?cart.map(p=>'<div class="item"><div class="mini">'+(p.img?'<img src="'+p.img+'" alt="">':p.e)+'</div><div class="item-info"><b>'+p.n+'</b><div>'+money(p.p)+' each</div><div class="cart-qty"><button type="button" aria-label="Decrease quantity" onclick="changeQty(\\''+p.id+'\\',-1)">−</button><span>'+p.qty+'</span><button type="button" aria-label="Increase quantity" onclick="changeQty(\\''+p.id+'\\',1)" '+(p.qty>=p.stock?'disabled':'')+'>+</button></div></div><strong class="item-subtotal">'+money(p.p*p.qty)+'</strong></div>').join(""):"<p>Your cart is empty.</p>";
-  el("#cartTotal").textContent=money(cart.reduce((sum,p)=>sum+p.p*p.qty,0));
+  el("#cartItems").innerHTML=cart.length?cart.map(p=>{
+    const name=escapeHTML(p.n),qty=Number(p.qty)||1;
+    return '<div class="item"><div class="mini">'+(p.img?'<img src="'+escapeHTML(p.img)+'" alt="">':p.e)+'</div><div class="item-info"><b>'+name+'</b><div>'+money(p.p)+' each</div><div class="cart-qty"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'">−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div></div><strong class="item-subtotal">'+money(p.p*qty)+'</strong></div>';
+  }).join(""):"<p>Your cart is empty.</p>";
+  el("#cartTotal").textContent=money(cart.reduce((sum,p)=>sum+p.p*(Number(p.qty)||1),0));
 }
 window.openCart=()=>{el("#drawer").classList.add("open");el("#overlay").classList.add("open")};
 window.closeCart=()=>{el("#drawer").classList.remove("open");el("#overlay").classList.remove("open")};
-window.checkout=()=>location.href="./checkout.html";
+window.checkout=()=>{if(!cart.length){alert("Please select at least one product.");return}location.href="./checkout.html"};
 window.trackOrder=async()=>{
-  const id=el("#orderId").value.trim(); if(!id){el("#trackResult").textContent="Please enter an order ID.";return}
+  const id=el("#orderId").value.trim();if(!id){el("#trackResult").textContent="Please enter an order ID.";return}
   const {data,error}=await supabase.from("orders").select("order_number,status,shipments(tracking_id,carrier,status)").eq("order_number",id).maybeSingle();
   el("#trackResult").textContent=error?"Unable to check order.":data?("Order "+data.order_number+" · "+data.status+(data.shipments?.[0]?.tracking_id?" · Tracking "+data.shipments[0].tracking_id:"")):"Order not found.";
 };
-el("#cartBtn").onclick=openCart;
-el("#search").oninput=e=>{searchQuery=e.target.value.trim().toLowerCase();currentPage=1;render()};
+el("#cartBtn").addEventListener("click",window.openCart);
+el("#search").addEventListener("input",e=>{searchQuery=e.target.value.trim().toLowerCase();currentPage=1;render()});
+el("#products").addEventListener("click",e=>{
+  const button=e.target.closest("button[data-qty]");if(button&&!button.disabled)window.changeQty(button.dataset.id,Number(button.dataset.qty));
+});
+el("#cartItems").addEventListener("click",e=>{
+  const button=e.target.closest("button[data-qty]");if(button&&!button.disabled)window.changeQty(button.dataset.id,Number(button.dataset.qty));
+});
+el("#pagination").addEventListener("click",e=>{
+  const button=e.target.closest("button[data-page]");if(!button)return;
+  currentPage=Number(button.dataset.page);render();
+  document.querySelector("#shop")?.scrollIntoView({behavior:"smooth",block:"start"});
+});
+el("#categories").addEventListener("click",e=>{
+  const button=e.target.closest("button[data-category]");if(!button)return;
+  currentCategory=button.dataset.category;currentPage=1;
+  el("#categories").querySelectorAll("button[data-category]").forEach(b=>b.classList.toggle("active",b===button));
+  render();
+});
 loadProducts();
