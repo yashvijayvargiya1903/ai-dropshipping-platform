@@ -3,7 +3,8 @@ const API_KEY="sb_publishable_WCj-w-p_KTzKoO9pDqGbVQ_ye8VdCOd";
 async function apiGet(path){const response=await fetch(API_URL+"/rest/v1/"+path,{headers:{apikey:API_KEY,Authorization:"Bearer "+API_KEY}});const body=await response.json().catch(()=>null);if(!response.ok)throw new Error(body?.message||("Database request failed ("+response.status+")"));return body;}
 
 const PAGE_SIZE=10;
-let products=[];\nlet siteDiscounts=[];
+let products=[];
+let siteDiscounts=[];
 let cart=[];
 try {
   const saved=JSON.parse(localStorage.getItem("drop-cart")||"[]");
@@ -33,7 +34,8 @@ async function loadProducts(){
     let categories=[];
     try{categories=await apiGet("categories?select=id,name");}
     catch(categoryError){console.warn("Category labels unavailable; showing products under Other:",categoryError.message);}
-    const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));\n    try{siteDiscounts=await apiGet("site_discounts?select=discount_type,discount_value,scope,category_id,starts_at,ends_at&active=eq.true");}catch(e){siteDiscounts=[]}
+    const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));
+    try{siteDiscounts=await apiGet("site_discounts?select=discount_type,discount_value,scope,category_id,starts_at,ends_at&active=eq.true");}catch(e){siteDiscounts=[]}
     products=(data||[]).map(p=>({
       id:p.id,n:p.name,p:Number(p.selling_price),e:"🛍️",img:p.image_url||"",
       stock:Math.max(0,Number(p.inventory_qty??0)),categoryId:p.category_id,c:categoryMap.get(p.category_id)||"Other"
@@ -46,7 +48,9 @@ async function loadProducts(){
     productsNode.innerHTML='<div class="products-error"><strong>Products are temporarily unavailable.</strong><p>Please refresh the page in a moment.</p></div>';
   }
 }
-function saleOff(p){const now=Date.now();const d=siteDiscounts.filter(x=>new Date(x.starts_at)<=now&&new Date(x.ends_at)>=now&&(x.scope==="all"||(x.scope==="category"&&x.category_id===p.categoryId))).slice(-1)[0];return d?Math.min(p.p,d.discount_type==="percent"?p.p*Number(d.discount_value)/100:Number(d.discount_value)):0}\nfunction salePrice(p){return Math.max(0,Math.round((p.p-saleOff(p))*100)/100)}\nfunction filteredProducts(){
+function saleOff(p){const now=Date.now();const d=siteDiscounts.filter(x=>new Date(x.starts_at)<=now&&new Date(x.ends_at)>=now&&(x.scope==="all"||(x.scope==="category"&&x.category_id===p.categoryId))).slice(-1)[0];return d?Math.min(p.p,d.discount_type==="percent"?p.p*Number(d.discount_value)/100:Number(d.discount_value)):0}
+function salePrice(p){return Math.max(0,Math.round((p.p-saleOff(p))*100)/100)}
+function filteredProducts(){
   let list=currentCategory==="all"?products:products.filter(p=>p.c===currentCategory);
   if(searchQuery)list=list.filter(p=>p.n.toLowerCase().includes(searchQuery));
   return list;
