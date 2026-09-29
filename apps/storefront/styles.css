@@ -256,3 +256,21 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 
 /* Coupon entry in the cart drawer */
 .cart-coupon{padding:16px 0 4px;border-top:1px solid #eee}.cart-coupon label{display:block;font-size:13px;font-weight:700;margin-bottom:9px}.cart-coupon-row{display:flex;gap:8px}.cart-coupon-row input{min-width:0;flex:1;width:60%;padding:11px 12px;border:1px solid #ddd;border-radius:10px;font:inherit;font-size:16px}.cart-coupon-row button{border:0;border-radius:10px;background:#151515;color:#fff;padding:0 16px;font-weight:700;cursor:pointer}.cart-coupon small{display:block;min-height:18px;margin-top:7px;color:#34834b;font-size:12px;line-height:1.4}
+
+
+/* Premium coupon card with breathing room after cart products */
+.drawer #cartItems{margin-bottom:22px}
+.drawer .cart-coupon{margin:0 0 4px;padding:18px 16px 14px;border:1px solid #e9e4d8;border-radius:16px;background:linear-gradient(135deg,#fbfaf6 0%,#f5f1e8 100%);box-shadow:0 5px 18px rgba(35,29,17,.045)}
+.drawer .cart-coupon label{display:flex;align-items:center;gap:8px;margin:0 0 11px;color:#25231f;font-size:13px;font-weight:800;letter-spacing:.15px}
+.drawer .cart-coupon label:before{content:"✦";display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:#eee6d5;color:#8b682e;font-size:13px}
+.drawer .cart-coupon-row{gap:9px;align-items:stretch}
+.drawer .cart-coupon-row input{height:44px;min-width:0;padding:0 13px;border:1px solid #ded8ca;border-radius:11px;background:#fff;color:#25231f;font-size:14px;letter-spacing:.5px;outline:none;transition:border-color .2s,box-shadow .2s}
+.drawer .cart-coupon-row input:focus{border-color:#b18a49;box-shadow:0 0 0 3px rgba(177,138,73,.12)}
+.drawer .cart-coupon-row input::placeholder{color:#aaa397;letter-spacing:0}
+.drawer .cart-coupon-row button{min-width:78px;padding:0 17px;border:1px solid #211f1a;border-radius:11px;background:#211f1a;color:#fff;font-size:13px;font-weight:800;letter-spacing:.2px;transition:background .2s,transform .2s}
+.drawer .cart-coupon-row button:active{transform:scale(.98)}
+.drawer .cart-coupon small{display:block;min-height:0;margin-top:8px;color:#37804d;font-size:12px;line-height:1.45}
+.drawer .cart-coupon small:empty{display:none}
+.drawer .total{margin-top:12px;padding:18px 0;border-top:1px solid #eeeae2;font-size:16px}
+.drawer .total strong{font-size:21px;letter-spacing:-.4px}
+@media(max-width:480px){.drawer{padding:20px}.drawer #cartItems{margin-bottom:20px}.drawer .cart-coupon{padding:16px 13px 13px}}
