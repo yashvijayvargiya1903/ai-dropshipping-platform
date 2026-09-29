@@ -1,4 +1,6 @@
-import { supabase } from "./supabase.js";
+const API_URL="https://dpiecktmpduhlapnkwvq.supabase.co";
+const API_KEY="sb_publishable_WCj-w-p_KTzKoO9pDqGbVQ_ye8VdCOd";
+async function apiGet(path){const response=await fetch(API_URL+"/rest/v1/"+path,{headers:{apikey:API_KEY,Authorization:"Bearer "+API_KEY}});const body=await response.json().catch(()=>null);if(!response.ok)throw new Error(body?.message||("Database request failed ("+response.status+")"));return body;}
 
 const PAGE_SIZE=10;
 let products=[];
@@ -27,12 +29,10 @@ async function loadProducts(){
   try{
     // Fetch products independently of category relationships so a missing PostgREST
     // relationship cannot prevent the entire catalogue from rendering.
-    const {data,error}=await supabase.from("products")
-      .select("id,name,selling_price,image_url,inventory_qty,category_id")
-      .eq("active",true).order("created_at",{ascending:false});
-    if(error)throw error;
-    const {data:categories, error:categoryError}=await supabase.from("categories").select("id,name");
-    if(categoryError)console.warn("Category labels unavailable:",categoryError.message);
+    const [data,categories]=await Promise.all([
+      apiGet("products?select=id,name,selling_price,image_url,inventory_qty,category_id&active=eq.true&order=created_at.desc"),
+      apiGet("categories?select=id,name")
+    ]);
     const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));
     products=(data||[]).map(p=>({
       id:p.id,n:p.name,p:Number(p.selling_price),e:"🛍️",img:p.image_url||"",
@@ -99,8 +99,7 @@ window.closeCart=()=>{el("#drawer").classList.remove("open");el("#overlay").clas
 window.checkout=()=>{if(!cart.length){alert("Please select at least one product.");return}location.href="./checkout.html"};
 window.trackOrder=async()=>{
   const id=el("#orderId").value.trim();if(!id){el("#trackResult").textContent="Please enter an order ID.";return}
-  const {data,error}=await supabase.from("orders").select("order_number,status,shipments(tracking_id,carrier,status)").eq("order_number",id).maybeSingle();
-  el("#trackResult").textContent=error?"Unable to check order.":data?("Order "+data.order_number+" · "+data.status+(data.shipments?.[0]?.tracking_id?" · Tracking "+data.shipments[0].tracking_id:"")):"Order not found.";
+  try{const rows=await apiGet("orders?select=order_number,status,shipments(tracking_id,carrier,status)&order_number=eq."+encodeURIComponent(id)+"&limit=1");const data=rows?.[0];el("#trackResult").textContent=data?("Order "+data.order_number+" · "+data.status+(data.shipments?.[0]?.tracking_id?" · Tracking "+data.shipments[0].tracking_id:"")):"Order not found.";}catch(error){el("#trackResult").textContent="Unable to check order: "+error.message;}
 };
 el("#cartBtn").addEventListener("click",window.openCart);
 el("#search").addEventListener("input",e=>{searchQuery=e.target.value.trim().toLowerCase();currentPage=1;render()});
