@@ -13,6 +13,7 @@
         ["orders.html", "Orders"],
         ["products.html", "Products"],
         ["action-center.html", "Product Vetting"],
+        ["offers.html", "Offers & Coupons"],
         ["customers.html", "Customers"],
         ["returns.html", "Returns"],
         ["analytics.html", "Analytics"],
