@@ -60,7 +60,8 @@ function render(list=filteredProducts()){
     const name=escapeHTML(p.n);
     const image=p.img?'<img src="'+escapeHTML(p.img)+'" alt="'+name+'" loading="lazy">':p.e;
     const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':
-      '<div class="qty-stepper"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'" '+(qty===0?'disabled':'')+'>−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div>';
+      (qty===0?'<button type="button" class="add" data-add="'+p.id+'">Add to cart</button>':
+      '<div class="qty-stepper"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'">−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div>');
     return '<article class="card"><div class="pic">'+image+'</div><div class="card-body"><h3>'+name+'</h3><div class="price">'+money(p.p)+'</div>'+controls+'</div></article>';
   }).join("")||'<p class="empty-products">No products found in this category.</p>';
   renderPagination(totalPages);
@@ -104,6 +105,8 @@ window.trackOrder=async()=>{
 el("#cartBtn").addEventListener("click",window.openCart);
 el("#search").addEventListener("input",e=>{searchQuery=e.target.value.trim().toLowerCase();currentPage=1;render()});
 el("#products").addEventListener("click",e=>{
+  const add=e.target.closest("button[data-add]");
+  if(add){window.changeQty(add.dataset.add,1);return;}
   const button=e.target.closest("button[data-qty]");if(button&&!button.disabled)window.changeQty(button.dataset.id,Number(button.dataset.qty));
 });
 el("#cartItems").addEventListener("click",e=>{
