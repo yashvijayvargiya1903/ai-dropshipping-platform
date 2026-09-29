@@ -207,3 +207,10 @@ input,select,textarea{font-size:16px;}
 .section-head>.search-wrap{display:flex!important;visibility:visible!important;opacity:1!important;flex:0 1 420px;width:100%;min-width:0;margin:0 0 0 auto}
 .section-head>.search-wrap input{display:block!important;visibility:visible!important;opacity:1!important}
 @media(max-width:800px){.section-head{display:flex;width:100%;padding:28px 5% 20px}.section-head>.search-wrap{display:flex!important;flex:1 1 100%;width:100%;max-width:none;margin:0}}
+
+/* Product cards: clear price spacing and aligned cart controls. */
+#products>.card>.card-body{display:flex;flex-direction:column;min-height:0}
+#products>.card .card-body h3{min-height:2.7em;margin:0 0 8px}
+#products>.card .price{margin:0 0 16px;line-height:1.4;min-height:1.4em}
+#products>.card .add,#products>.card .qty-stepper,#products>.card .stock-label{margin-top:auto;top:0}
+#products>.card .add,#products>.card .qty-stepper{flex-shrink:0}
