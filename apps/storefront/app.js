@@ -26,13 +26,15 @@ function filteredProducts(){
 
 function render(list=filteredProducts()){
   const totalPages=Math.max(1,Math.ceil(list.length/PAGE_SIZE));
-  if(currentPage>totalPages) currentPage=totalPages;
-  const start=(currentPage-1)*PAGE_SIZE;
-  const pageItems=list.slice(start,start+PAGE_SIZE);
-  el("#products").innerHTML=pageItems.map(p=>'<article class="card"><div class="pic">'+(p.img?'<img src="'+p.img+'" alt="'+p.n+'" loading="lazy">':p.e)+'</div><div class="card-body"><h3>'+p.n+'</h3><div class="price">'+money(p.p)+'</div><button class="add" '+(p.stock===0?'disabled':'')+' onclick="add(\''+p.id+'\')">'+(p.stock===0?'Out of stock':'Add to cart')+'</button></div></article>').join("")||"<p>No products found.</p>";
+  if(currentPage>totalPages)currentPage=totalPages;
+  const pageItems=list.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
+  el("#products").innerHTML=pageItems.map(p=>{
+    const qty=cart.find(x=>x.id===p.id)?.qty||0;
+    const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':'<div class="qty-stepper"><button type="button" aria-label="Decrease quantity" onclick="changeQty(\\''+p.id+'\\',-1)" '+(qty===0?'disabled':'')+'>−</button><span>'+qty+'</span><button type="button" aria-label="Increase quantity" onclick="changeQty(\\''+p.id+'\\',1)" '+(qty>=p.stock?'disabled':'')+'>+</button></div>';
+    return '<article class="card"><div class="pic">'+(p.img?'<img src="'+p.img+'" alt="'+p.n+'" loading="lazy">':p.e)+'</div><div class="card-body"><h3>'+p.n+'</h3><div class="price">'+money(p.p)+'</div>'+controls+'</div></article>';
+  }).join("")||"<p>No products found.</p>";
   renderPagination(totalPages);
 }
-
 function renderPagination(totalPages){
   const wrap=el("#pagination");
   if(!wrap)return;
