@@ -129,7 +129,9 @@ window.trackOrder=async()=>{
   const id=el("#orderId").value.trim();if(!id){el("#trackResult").textContent="Please enter an order ID.";return}
   try{const rows=await apiGet("orders?select=order_number,status,shipments(tracking_id,carrier,status)&order_number=eq."+encodeURIComponent(id)+"&limit=1");const data=rows?.[0];el("#trackResult").textContent=data?("Order "+data.order_number+" · "+data.status+(data.shipments?.[0]?.tracking_id?" · Tracking "+data.shipments[0].tracking_id:"")):"Order not found.";}catch(error){el("#trackResult").textContent="Unable to check order: "+error.message;}
 };
-el("#cartBtn").addEventListener("click",window.openCart);\nel("#closeCartBtn").addEventListener("click",window.closeCart);\ndocument.addEventListener("keydown",e=>{if(e.key==="Escape"&&el("#drawer").classList.contains("open"))window.closeCart()});
+el("#cartBtn").addEventListener("click",window.openCart);
+el("#closeCartBtn").addEventListener("click",window.closeCart);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&el("#drawer").classList.contains("open"))window.closeCart()});
 const searchInput=el("#search");
 const clearSearch=el("#clearSearch");
 function syncSearch(){
