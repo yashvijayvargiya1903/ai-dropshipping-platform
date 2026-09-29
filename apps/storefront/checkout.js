@@ -36,5 +36,6 @@ el("#form").onsubmit=async e=>{
   const r=await fetch("https://dpiecktmpduhlapnkwvq.supabase.co/functions/v1/cashfree-payments",{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({order_id:o.data.id,origin:location.origin})});
   const g=await r.json();if(!r.ok)return alert(g.error||"Unable to start payment. Please try again.");
   if(!g.payment_session_id)return alert("Cashfree did not return a payment session.");
-  const cashfree=Cashfree({mode:g.environment==="production"?"production":"sandbox"});cashfree.checkout({paymentSessionId:g.payment_session_id,redirectTarget:"_self"})
+  const cashfree=Cashfree({mode:g.environment==="production"?"production":"sandbox"});cashfree.checkout({paymentSessionId:g.payment_session_id,redirectTarget:"_self"})  }catch(error){alert(error?.message||"Something went wrong. Please try again.");}
+  finally{if(el("#form").style.display!=="none"){submit.disabled=false;submit.textContent=originalLabel}}
 };
