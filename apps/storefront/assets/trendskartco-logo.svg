@@ -1,39 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
-<title id="title">Trendskartco.in</title>
-<desc id="desc">Premium home, kitchen and gadget shopping logo with a house and curated products.</desc>
-<defs>
- <linearGradient id="roof" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7d7c8"/><stop offset=".55" stop-color="#e99a85"/><stop offset="1" stop-color="#d97769"/></linearGradient>
- <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8e4bd"/><stop offset="1" stop-color="#c99758"/></linearGradient>
- <linearGradient id="sage" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9d9c4"/><stop offset="1" stop-color="#829c81"/></linearGradient>
- <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#5c483d" flood-opacity=".15"/></filter>
-</defs>
-<rect width="900" height="900" fill="#fff"/>
-<circle cx="450" cy="414" r="355" fill="#fffdf9" stroke="#f1e5d8" stroke-width="3"/>
-<g filter="url(#shadow)" stroke-linecap="round" stroke-linejoin="round">
- <!-- products behind the house -->
- <g stroke="#b88755" stroke-width="4">
-  <path d="M247 313h82l-9-70h-64z" fill="#f7eee0"/><path d="M265 243q0-42 23-42t23 42" fill="none" stroke="#d5a46b" stroke-width="9"/><path d="M260 313h56" stroke="#d5a46b" stroke-width="7"/>
-  <rect x="574" y="256" width="74" height="112" rx="13" fill="#f7f2e9"/><rect x="584" y="243" width="54" height="20" rx="7" fill="url(#gold)"/><path d="M589 280h44" stroke="#e4cba7" stroke-width="4"/>
-  <rect x="667" y="295" width="54" height="90" rx="9" fill="#f4e8dc"/><rect x="672" y="285" width="44" height="17" rx="5" fill="url(#gold)"/>
-  <rect x="176" y="345" width="55" height="75" rx="9" fill="#e7eee3"/><path d="M203 345v-44m0 19q-27-10-28-32 23-1 28 21m0-1q3-28 27-33-1 25-27 33" fill="url(#sage)" stroke="#829c81" stroke-width="4"/>
- </g>
- <!-- house -->
- <path d="M277 430 450 286 623 430v165H277z" fill="#fffaf3" stroke="#d9b99b" stroke-width="5"/>
- <path d="M250 433 450 263 650 433l-25 27-175-145-175 145z" fill="url(#roof)" stroke="#d78372" stroke-width="4"/>
- <path d="M403 595v-91q0-10 10-10h74q10 0 10 10v91" fill="#d9b38d" stroke="#caa17c" stroke-width="4"/>
- <g fill="#f2d9b5" stroke="#d7b58e" stroke-width="4"><rect x="328" y="441" width="46" height="44" rx="5"/><rect x="526" y="441" width="46" height="44" rx="5"/></g>
- <!-- cart frame -->
- <path d="M175 373h44l35 133q4 15 21 15h397q18 0 23-17l27-85H266" fill="none" stroke="url(#gold)" stroke-width="13"/>
- <path d="M298 534h347" fill="none" stroke="#d3a56f" stroke-width="7"/>
- <circle cx="310" cy="552" r="15" fill="#d9b98e" stroke="#fff" stroke-width="6"/><circle cx="619" cy="552" r="15" fill="#d9b98e" stroke="#fff" stroke-width="6"/>
- <!-- small curated product icons -->
- <g stroke="#8da48a" stroke-width="4" fill="url(#sage)"><path d="M710 465q-18-30-4-53 25 14 18 38 15-31 38-28-1 29-33 42" /><path d="M715 465h34" fill="none"/></g>
- <rect x="186" y="433" width="32" height="58" rx="9" fill="#f5d8c9" stroke="#d69a86" stroke-width="4"/>
- <rect x="694" y="407" width="34" height="55" rx="8" fill="#e4e9ed" stroke="#9baab1" stroke-width="4"/><rect x="701" y="415" width="20" height="34" rx="3" fill="#c5d9df" stroke="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">Trendskartco.in</title><desc id="desc">Bold black and white home and shopping logo featuring a house and everyday products.</desc>
+<defs><linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#bfc0c2"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>
+<g stroke="#111" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M100 310h42l42 190h250l45-145H171" fill="none" stroke-width="13"/><circle cx="230" cy="530" r="19" fill="#111"/><circle cx="405" cy="530" r="19" fill="#111"/>
+<path d="M195 338v-58q0-18 18-18h56q18 0 18 18v58M216 262v-24q0-28 25-28t25 28v24" fill="none"/><path d="M310 325v-68q0-20 20-20h48q20 0 20 20v68" fill="url(#silver)"/>
+<path d="M405 360 600 190l195 170v170H405Z" fill="#fff" stroke-width="13"/><path d="M372 366 600 166l228 200" fill="none" stroke="#111" stroke-width="28"/><path d="M545 530V402q0-15 15-15h80q15 0 15 15v128" fill="url(#silver)" stroke-width="10"/><path d="M475 400h35v35h-35zM690 400h35v35h-35z" fill="#111" stroke-width="6"/>
+<path d="M870 215h105l22 95H850Z" fill="url(#silver)"/><path d="M910 310v95h28v-95M890 405h70" fill="none"/>
+<rect x="1010" y="270" width="72" height="135" rx="13" fill="url(#silver)" stroke-width="8"/><path d="M1030 286h32" stroke-width="5"/>
+<path d="M890 415q-5-60-35-80m35 80q10-70 52-95m-52 95q-30-38-68-32" fill="none" stroke-width="8"/><path d="M852 335q-37-40-58-8 20 34 58 8Zm44-18q10-48 47-44 2 37-47 44Zm-36 17q-38-22-58 7 28 23 58-7Z" fill="url(#silver)" stroke-width="6"/>
 </g>
-<path d="M130 604q140-54 286-12t354 0" fill="none" stroke="#e7bba5" stroke-width="12" stroke-linecap="round"/>
-<path d="M130 604q140-54 286-12t354 0" fill="none" stroke="#fff5eb" stroke-width="4" stroke-linecap="round"/>
-<text x="450" y="700" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="68" font-weight="800" letter-spacing="-3" fill="#25302d">Trends<tspan fill="#d98e79">kartco</tspan><tspan fill="#8aa18a">.in</tspan></text>
-<path d="M220 736h115m230 0h115" stroke="#d9b68e" stroke-width="2"/><path d="M430 731q20-22 40 0-20 25-40 0m40 0q20-22 40 0-20 25-40 0" fill="url(#sage)"/>
-<text x="450" y="775" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700" letter-spacing="5" fill="#53605b">HOME DECOR · KITCHEN · GADGETS</text>
+<path d="M65 565q240-68 480-10t590 0" fill="none" stroke="#111" stroke-width="15" stroke-linecap="round"/>
+<text x="600" y="655" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="91" font-weight="900" letter-spacing="-4" fill="#111">Trendskartco.in</text>
+<path d="M205 690h175m440 0h175" stroke="#111" stroke-width="3"/><text x="600" y="700" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" letter-spacing="8" fill="#222">HOME DECOR  •  KITCHEN  •  GADGETS</text>
 </svg>
