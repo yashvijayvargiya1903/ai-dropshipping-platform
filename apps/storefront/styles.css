@@ -201,3 +201,9 @@ input,select,textarea{font-size:16px;}
 .search-clear{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:50%;background:#efeee9;color:#555;font-size:23px;line-height:1;cursor:pointer;padding:0;}
 .search-clear[hidden]{display:none;}
 @media(max-width:800px){.search-wrap{width:100%;margin-left:0}.section-head{align-items:stretch}}
+
+/* Ensure the search control is visible and takes the full available row. */
+.section-head{display:flex;align-items:center;justify-content:flex-end;min-width:0}
+.section-head>.search-wrap{flex:0 1 420px;width:100%;min-width:0;margin:0 0 0 auto}
+.section-head>.search-wrap input{display:block;visibility:visible;opacity:1}
+@media(max-width:800px){.section-head{display:flex;width:100%;padding:28px 5% 20px}.section-head>.search-wrap{flex:1 1 100%;width:100%;max-width:none;margin:0}}
