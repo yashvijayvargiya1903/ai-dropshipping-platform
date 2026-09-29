@@ -188,3 +188,16 @@ body{font-family:'DM Sans',Inter,ui-sans-serif,system-ui,-apple-system,sans-seri
 #products>.card .add{min-height:40px;display:flex;align-items:center;justify-content:center;font-weight:700}
 #products>.card .qty-stepper{margin-bottom:0}
 @media(max-width:480px){#products>.card>.pic{flex-basis:150px}#products>.card .card-body h3{min-height:2.7em;font-size:13px}#products>.card .add{padding:9px 4px;font-size:12px}}
+
+
+/* Prevent accidental double-tap zoom and keep search fixed within its layout. */
+html,body{touch-action:pan-x pan-y; -webkit-text-size-adjust:100%;}
+button,a,[role="button"],input,select,textarea{touch-action:manipulation;}
+input,select,textarea{font-size:16px;}
+.search-wrap{position:relative;display:flex;align-items:center;width:min(100%,420px);margin-left:auto;min-width:0;}
+.search-wrap input{width:100%;min-width:0;height:46px;padding:12px 44px 12px 16px;font-size:16px;line-height:1.25;outline:none;}
+.search-wrap input:focus{border-color:#8b6cf6;box-shadow:0 0 0 3px rgba(124,92,255,.10);}
+.search-wrap input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none;}
+.search-clear{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:50%;background:#efeee9;color:#555;font-size:23px;line-height:1;cursor:pointer;padding:0;}
+.search-clear[hidden]{display:none;}
+@media(max-width:800px){.search-wrap{width:100%;margin-left:0}.section-head{align-items:stretch}}
