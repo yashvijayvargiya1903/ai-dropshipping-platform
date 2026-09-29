@@ -17,3 +17,6 @@ drop policy if exists "Public can read active coupons" on public.coupons;
 create policy "Public can read active coupons" on public.coupons for select to anon, authenticated using (active = true);
 drop policy if exists "Authenticated owners manage coupons" on public.coupons;
 create policy "Authenticated owners manage coupons" on public.coupons for all to authenticated using (true) with check (true);
+
+alter table public.orders add column if not exists discount numeric(12,2) not null default 0;
+alter table public.orders add column if not exists coupon_code text;
