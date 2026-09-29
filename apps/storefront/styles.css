@@ -252,3 +252,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 .nav .brand-logo-img{display:block!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;max-height:38px!important;aspect-ratio:1/1!important;object-fit:cover!important;object-position:center!important;border-radius:50%!important;background:#fff!important;box-shadow:0 2px 8px rgba(0,0,0,.10)!important}
 @media(max-width:800px){.nav a.brand-lockup,.nav .brand-logo-img{width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important;max-height:34px!important;flex-basis:34px!important}}
 @media(max-width:480px){.nav a.brand-lockup,.nav .brand-logo-img{width:32px!important;height:32px!important;min-width:32px!important;max-width:32px!important;max-height:32px!important;flex-basis:32px!important}}
+
+
+/* Coupon entry in the cart drawer */
+.cart-coupon{padding:16px 0 4px;border-top:1px solid #eee}.cart-coupon label{display:block;font-size:13px;font-weight:700;margin-bottom:9px}.cart-coupon-row{display:flex;gap:8px}.cart-coupon-row input{min-width:0;flex:1;width:60%;padding:11px 12px;border:1px solid #ddd;border-radius:10px;font:inherit;font-size:16px}.cart-coupon-row button{border:0;border-radius:10px;background:#151515;color:#fff;padding:0 16px;font-weight:700;cursor:pointer}.cart-coupon small{display:block;min-height:18px;margin-top:7px;color:#34834b;font-size:12px;line-height:1.4}
