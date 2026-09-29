@@ -1,5 +1,5 @@
 import { supabase } from "./supabase.js";
-let products=[]; let cart=JSON.parse(localStorage.getItem("drop-cart")||"[]");
+let products=[]; const oldCart=JSON.parse(localStorage.getItem("drop-cart")||"[]"); let cart=oldCart.reduce((a,p)=>{const q=a.find(x=>x.id===p.id);if(q)q.qty+=(Number(p.qty)||1);else a.push({...p,qty:Math.max(1,Number(p.qty)||1)});return a},[]);
 const PAGE_SIZE=10;
 let currentCategory="all";
 let currentPage=1;
