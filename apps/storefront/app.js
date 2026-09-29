@@ -103,7 +103,20 @@ window.trackOrder=async()=>{
   try{const rows=await apiGet("orders?select=order_number,status,shipments(tracking_id,carrier,status)&order_number=eq."+encodeURIComponent(id)+"&limit=1");const data=rows?.[0];el("#trackResult").textContent=data?("Order "+data.order_number+" · "+data.status+(data.shipments?.[0]?.tracking_id?" · Tracking "+data.shipments[0].tracking_id:"")):"Order not found.";}catch(error){el("#trackResult").textContent="Unable to check order: "+error.message;}
 };
 el("#cartBtn").addEventListener("click",window.openCart);
-el("#search").addEventListener("input",e=>{searchQuery=e.target.value.trim().toLowerCase();currentPage=1;render()});
+const searchInput=el("#search");
+const clearSearch=el("#clearSearch");
+function syncSearch(){
+  searchQuery=searchInput.value.trim().toLowerCase();
+  clearSearch.hidden=searchInput.value.length===0;
+  currentPage=1;
+  render();
+}
+searchInput.addEventListener("input",syncSearch);
+clearSearch.addEventListener("click",()=>{
+  searchInput.value="";
+  searchInput.dispatchEvent(new Event("input",{bubbles:true}));
+  searchInput.focus({preventScroll:true});
+});
 el("#products").addEventListener("click",e=>{
   const add=e.target.closest("button[data-add]");
   if(add){window.changeQty(add.dataset.add,1);return;}
