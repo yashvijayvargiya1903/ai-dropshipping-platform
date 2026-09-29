@@ -29,10 +29,10 @@ async function loadProducts(){
   try{
     // Fetch products independently of category relationships so a missing PostgREST
     // relationship cannot prevent the entire catalogue from rendering.
-    const [data,categories]=await Promise.all([
-      apiGet("products?select=id,name,selling_price,image_url,inventory_qty,category_id&active=eq.true&order=created_at.desc"),
-      apiGet("categories?select=id,name")
-    ]);
+    const data=await apiGet("products?select=id,name,selling_price,image_url,inventory_qty,category_id&active=eq.true&order=created_at.desc");
+    let categories=[];
+    try{categories=await apiGet("categories?select=id,name");}
+    catch(categoryError){console.warn("Category labels unavailable; showing products under Other:",categoryError.message);}
     const categoryMap=new Map((categories||[]).map(c=>[c.id,c.name]));
     products=(data||[]).map(p=>({
       id:p.id,n:p.name,p:Number(p.selling_price),e:"🛍️",img:p.image_url||"",
