@@ -131,3 +131,11 @@ h1{font-size:31px;letter-spacing:-1.5px;margin:0 0 35px}
   aside{width:230px}
   main{padding-left:12px;padding-right:12px}
 }
+
+
+/* Site-wide mobile no-auto-zoom defaults: preserve normal scrolling and pinch zoom. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+@media(max-width:800px){
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea,[contenteditable=true]{font-size:16px!important;}
+  button,a,[role=button],input,select,textarea{touch-action:manipulation;}
+}
