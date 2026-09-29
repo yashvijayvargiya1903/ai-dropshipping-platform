@@ -122,8 +122,8 @@ async function applyCartCoupon(){
   }catch(e){appliedCoupon="";couponDiscount=0;localStorage.removeItem("drop-coupon");msg.textContent=e.message;save()}
 }
 window.applyCartCoupon=applyCartCoupon;
-window.openCart=()=>{el("#drawer").classList.add("open");el("#overlay").classList.add("open");sessionStorage.setItem("storefront-cart-open","1");persistView()};
-window.closeCart=()=>{el("#drawer").classList.remove("open");el("#overlay").classList.remove("open");sessionStorage.removeItem("storefront-cart-open");persistView()};
+window.openCart=()=>{el("#drawer").classList.add("open");el("#overlay").classList.add("open");sessionStorage.setItem("storefront-cart-open","1");if(location.hash!=="#cart")history.replaceState(null,"",location.pathname+location.search+"#cart");persistView()};
+window.closeCart=()=>{el("#drawer").classList.remove("open");el("#overlay").classList.remove("open");sessionStorage.removeItem("storefront-cart-open");if(location.hash==="#cart")history.replaceState(null,"",location.pathname+location.search);persistView()};
 window.checkout=()=>{if(!cart.length){alert("Please select at least one product.");return}location.href="./checkout.html"};
 window.trackOrder=async()=>{
   const id=el("#orderId").value.trim();if(!id){el("#trackResult").textContent="Please enter an order ID.";return}
@@ -165,4 +165,4 @@ el("#categories").addEventListener("click",e=>{
   el("#categories").querySelectorAll("button[data-category]").forEach(b=>b.classList.toggle("active",b===button));
   render();
 });
-loadProducts().then(()=>{if(sessionStorage.getItem("storefront-cart-open")==="1")window.openCart();});
+loadProducts().then(()=>{if(location.hash==="#cart"||sessionStorage.getItem("storefront-cart-open")==="1")window.openCart();});
