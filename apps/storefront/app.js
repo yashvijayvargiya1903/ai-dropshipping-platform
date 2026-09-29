@@ -58,7 +58,8 @@ function render(list=filteredProducts()){
   el("#products").innerHTML=pageItems.map(p=>{
     const qty=cart.find(x=>x.id===p.id)?.qty||0;
     const name=escapeHTML(p.n);
-    const sale=salePrice(p);const price=sale<p.p?`<div class="price"><del>${money(p.p)}</del> <strong>${money(sale)}</strong></div>`:`${price}`;\n    const image=p.img?'<img src="'+escapeHTML(p.img)+'" alt="'+name+'" loading="lazy">':p.e;
+    const sale=salePrice(p);const price=sale<p.p?`<div class="price"><del>${money(p.p)}</del> <strong>${money(sale)}</strong></div>`:`<div class="price">${money(p.p)}</div>`;
+    const image=p.img?'<img src="'+escapeHTML(p.img)+'" alt="'+name+'" loading="lazy">':p.e;
     const controls=p.stock===0?'<span class="stock-label">Out of stock</span>':
       (qty===0?'<button type="button" class="add" data-add="'+p.id+'">Add to cart</button>':
       '<div class="qty-stepper"><button type="button" data-qty="-1" data-id="'+p.id+'" aria-label="Decrease '+name+'">−</button><span>'+qty+'</span><button type="button" data-qty="1" data-id="'+p.id+'" aria-label="Increase '+name+'" '+(qty>=p.stock?'disabled':'')+'>+</button></div>');
