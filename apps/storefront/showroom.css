@@ -4,7 +4,7 @@
 
 /* REAL INTERACTIVE WEBGL SHOWROOM */
 .real-3d-stage{height:clamp(390px,48vw,570px);min-height:390px;max-width:720px;width:100%;justify-self:end;position:relative;overflow:hidden;isolation:isolate;border-radius:8px;background:radial-gradient(ellipse at 55% 35%,#f9e9d5 0%,#e9dfcf 48%,#d4d0c3 100%);box-shadow:0 30px 70px #5c4e3817;transform:none;animation:arrive .9s ease-out both}
-.real-3d-stage #showroom-canvas{display:block;width:100%;height:100%;position:absolute;inset:0;touch-action:pan-y;outline:none}
+.real-3d-stage #showroom-canvas{display:block;width:100%;height:100%;position:absolute;inset:0;touch-action:none;outline:none}
 .real-3d-stage canvas{cursor:grab}.real-3d-stage canvas:active{cursor:grabbing}
 .scene-loading{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;background:linear-gradient(145deg,#f5ecdd,#e6dfd2);font-size:12px;color:#6b665b;transition:opacity .4s}
 .scene-loading.is-hidden{opacity:0;pointer-events:none}.loading-orbit{width:38px;height:38px;border:2px solid #c9b9a4;border-top-color:#8b7156;border-radius:50%;animation:scene-spin .8s linear infinite}@keyframes scene-spin{to{transform:rotate(360deg)}}
