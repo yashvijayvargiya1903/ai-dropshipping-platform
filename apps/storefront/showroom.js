@@ -68,7 +68,7 @@ function init3D(){
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));renderer.setSize(stage.clientWidth,stage.clientHeight,false);
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
   scene=new THREE.Scene();scene.background=new THREE.Color("#e9dfcf");scene.fog=new THREE.Fog("#e9dfcf",12,25);
-  camera=new THREE.PerspectiveCamera(38,stage.clientWidth/stage.clientHeight,.1,60);camera.position.set(7.8,6.6,10.5);
+  camera=new THREE.PerspectiveCamera(38,stage.clientWidth/stage.clientHeight,.1,60);camera.position.set(4.6,5.8,10.5);
   controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,1.1,0);controls.enableDamping=true;controls.dampingFactor=.065;controls.minDistance=6.5;controls.maxDistance=15;controls.minPolarAngle=.5;controls.maxPolarAngle=1.42;controls.maxAzimuthAngle=1.2;controls.minAzimuthAngle=-1.2;controls.update();
   scene.add(new THREE.HemisphereLight("#fff7e8","#b0a18a",2.2));
   const key=new THREE.DirectionalLight("#fff2dc",3.1);key.position.set(4,9,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);scene.add(key);
@@ -104,7 +104,7 @@ function focusZone(name){
  activeZone=name;
  if(!camera||!controls)return;
  const target=name==="all"?new THREE.Vector3(0,1,0):new THREE.Vector3(...({decor:[-3.5,1.1,-1.5],kitchen:[-1.25,1.1,-.15],gadgets:[1.15,1.1,-.15],fashion:[3.4,1.1,-1.5]})[name]);
- const offset=name==="all"?new THREE.Vector3(7.8,5.5,10.5):new THREE.Vector3(3.8,2.8,5.2);
+ const offset=name==="all"?new THREE.Vector3(4.6,5.5,10.5):new THREE.Vector3(3.8,2.8,5.2);
  const startTarget=controls.target.clone(),startPos=camera.position.clone(),endPos=target.clone().add(offset);let t0=performance.now();
  function move(now){const t=Math.min(1,(now-t0)/650),e=t*t*(3-2*t);controls.target.copy(startTarget.clone().lerp(target,e));camera.position.copy(startPos.clone().lerp(endPos,e));if(t<1)requestAnimationFrame(move);}
  requestAnimationFrame(move);
