@@ -5,7 +5,19 @@
 <title>Trendskartco — Smart Shopping</title>
 <link rel="stylesheet" href="./styles.css?v=products-fix-2">
 <script>try{if(location.hash==="#cart"||sessionStorage.getItem("storefront-cart-open")==="1")document.documentElement.classList.add("cart-restore")}catch(e){if(location.hash==="#cart")document.documentElement.classList.add("cart-restore")}</script>
-<style>html.cart-restore #drawer{right:0!important;transition:none!important}html.cart-restore #overlay{display:block!important}</style>
+<style>
+html.cart-restore #drawer{right:0!important;transition:none!important}html.cart-restore #overlay{display:block!important}
+.footer-modal-backdrop{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(13,10,20,.68);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.footer-modal-backdrop.is-open{display:flex}
+.footer-modal{position:relative;width:min(760px,100%);height:min(82vh,760px);height:min(82dvh,760px);background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 90px rgba(0,0,0,.32);display:flex;flex-direction:column}
+.footer-modal-top{height:62px;min-height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 22px;border-bottom:1px solid #eee;background:#fff}
+.footer-modal-title{font-size:16px;font-weight:800;color:#171717;margin:0}
+.footer-modal-close{width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:50%;background:#f1f0f4;color:#171717;font-size:28px;line-height:1;cursor:pointer}
+.footer-modal-close:hover{background:#e6e2ec}
+.footer-modal-frame{width:100%;height:100%;flex:1;border:0;background:#fff}
+body.footer-modal-open{overflow:hidden}
+@media(max-width:480px){.footer-modal-backdrop{padding:10px}.footer-modal{height:88vh;height:88dvh;border-radius:16px}.footer-modal-top{height:56px;min-height:56px;padding:0 12px 0 16px}}
+</style>
 </head>
 <body><header class="nav"><a class="logo brand-lockup" href="#" aria-label="Trendskartco.in home"><img class="brand-logo-img" src="./assets/16377D47-8879-4828-89CF-26406A711498.png" alt="Trendskartco.in"></a><nav><a href="#shop">Shop</a><a href="#categories">Categories</a><a href="#orders">Track order</a></nav><button class="cart" id="cartBtn">Cart <b id="cartCount">0</b></button></header>
 <main>
@@ -29,13 +41,51 @@
     <a class="footer-instagram" href="https://www.instagram.com/trendskartco.in/" target="_blank" rel="noopener"><span class="ig-mark">◎</span> @trendskartco.in</a>
   </div>
   <div class="footer-links">
-    <a href="./policies.html"><span>↗</span> Shipping & Returns</a><a href="./refunds.html"><span>↗</span> Refunds & Cancellation</a><a href="./privacy.html"><span>↗</span> Privacy</a><a href="./terms.html"><span>↗</span> Terms</a>
-    <a href="./account.html"><span>↗</span> My Orders</a>
+    <a href="./policies.html" data-footer-modal="Shipping & Returns"> <span>↗</span> Shipping & Returns</a>
+    <a href="./refunds.html" data-footer-modal="Refunds & Cancellation"><span>↗</span> Refunds & Cancellation</a>
+    <a href="./privacy.html" data-footer-modal="Privacy Policy"><span>↗</span> Privacy</a>
+    <a href="./terms.html" data-footer-modal="Terms of Service"><span>↗</span> Terms</a>
+    <a href="./account.html" data-footer-modal="My Orders"><span>↗</span> My Orders</a>
     <a href="https://www.instagram.com/trendskartco.in/" target="_blank" rel="noopener"><span>◎</span> Instagram</a>
   </div>
   <div class="footer-note">© 2026 Trendskartco</div>
 </footer>
+<div id="footerModalBackdrop" class="footer-modal-backdrop" aria-hidden="true">
+  <section class="footer-modal" role="dialog" aria-modal="true" aria-labelledby="footerModalTitle">
+    <div class="footer-modal-top"><h2 id="footerModalTitle" class="footer-modal-title">Information</h2><button id="footerModalClose" class="footer-modal-close" type="button" aria-label="Close popup">×</button></div>
+    <iframe id="footerModalFrame" class="footer-modal-frame" title="Footer information" src="about:blank"></iframe>
+  </section>
+</div>
 <div id="drawer" class="drawer"><div class="drawer-head"><h3>Your cart</h3><button id="closeCartBtn" type="button" aria-label="Close cart">×</button></div><div id="cartItems"></div><div class="cart-coupon"><label for="cartCoupon">Have a coupon?</label><div class="cart-coupon-row"><input id="cartCoupon" placeholder="Enter coupon code" autocomplete="off"><button type="button" onclick="applyCartCoupon()">Apply</button></div><small id="cartCouponMsg" aria-live="polite"></small></div><div class="total"><span>Final amount</span><strong id="cartTotal">₹0</strong></div><button class="primary full" onclick="checkout()">Proceed to checkout</button></div>
 <div id="overlay" class="overlay" onclick="closeCart()"></div>
+<script>
+(()=> {
+ const backdrop=document.getElementById("footerModalBackdrop");
+ const frame=document.getElementById("footerModalFrame");
+ const title=document.getElementById("footerModalTitle");
+ const closeButton=document.getElementById("footerModalClose");
+ let previousFocus=null;
+ function closeFooterModal(){
+   backdrop.classList.remove("is-open");
+   backdrop.setAttribute("aria-hidden","true");
+   document.body.classList.remove("footer-modal-open");
+   frame.src="about:blank";
+   if(previousFocus&&typeof previousFocus.focus==="function")previousFocus.focus();
+ }
+ document.querySelectorAll("[data-footer-modal]").forEach(link=>link.addEventListener("click",event=>{
+   event.preventDefault();
+   previousFocus=link;
+   title.textContent=link.dataset.footerModal||"Information";
+   frame.src=link.getAttribute("href");
+   backdrop.classList.add("is-open");
+   backdrop.setAttribute("aria-hidden","false");
+   document.body.classList.add("footer-modal-open");
+   closeButton.focus();
+ }));
+ closeButton.addEventListener("click",closeFooterModal);
+ backdrop.addEventListener("click",event=>{if(event.target===backdrop)closeFooterModal()});
+ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&backdrop.classList.contains("is-open"))closeFooterModal()});
+})();
+</script>
 <script type="module" src="./app.js?v=cart-close-fix-1"></script>
 </body></html>
