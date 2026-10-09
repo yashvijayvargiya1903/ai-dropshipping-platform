@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f3f0e9">
-<meta name="description" content="Explore the Trendskartco 3D-inspired shopping showroom. Discover everyday finds for home, kitchen, gadgets and style.">
+<meta name="description" content="Explore the Trendskartco interactive 3D shopping showroom. Discover everyday finds for home, kitchen, gadgets and style.">
 <title>Explore the Showroom — Trendskartco</title>
 <link rel="stylesheet" href="./showroom.css">
 </head>
@@ -21,15 +21,19 @@
     <a class="pill-button" href="#collections">Explore the showroom <span aria-hidden="true">↓</span></a>
     <p class="micro-note"><span aria-hidden="true">✳</span> Designed for your phone. No app needed.</p>
   </div>
-  <div class="showroom-art" aria-label="Illustration of a dimensional modern showroom">
-    <div class="sun-disc"></div><div class="back-wall"></div><div class="side-wall"></div><div class="floor"></div>
-    <div class="arch arch-back"></div><div class="arch arch-front"></div>
-    <div class="shelf shelf-one"><i></i><i></i><i></i></div>
-    <div class="pedestal pedestal-left"><div class="vase vase-tall"></div><div class="vase vase-round"></div></div>
-    <div class="pedestal pedestal-mid"><div class="lamp"><b></b><i></i></div></div>
-    <div class="pedestal pedestal-right"><div class="plant"><i></i><i></i><i></i><b></b></div></div>
-    <span class="art-label label-top">THE EVERYDAY EDIT</span><span class="art-label label-bottom">01 / DISCOVER MORE</span>
-    <div class="floating-chip"><span class="chip-star">✳</span><span><b>Good finds.</b><small>Better everyday.</small></span></div>
+  <div class="showroom-art real-3d-stage" aria-label="Interactive 3D Trendskartco showroom">
+    <canvas id="showroom-canvas" aria-label="Interactive 3D showroom. Drag to rotate, pinch to zoom."></canvas>
+    <div class="scene-loading" id="scene-loading"><span class="loading-orbit"></span><b>Building your showroom…</b></div>
+    <div class="scene-top-label"><span class="live-dot"></span> LIVE 3D ENVIRONMENT</div>
+    <div class="scene-controls"><span>↔ Drag to explore</span><span>⌕ Pinch to zoom</span><button id="reset-scene" type="button" aria-label="Reset 3D camera">Reset view ↺</button></div>
+    <div class="scene-category-switcher" aria-label="Explore showroom zones">
+      <button class="scene-zone active" data-zone="all" type="button">All zones</button>
+      <button class="scene-zone" data-zone="decor" type="button">Home</button>
+      <button class="scene-zone" data-zone="kitchen" type="button">Kitchen</button>
+      <button class="scene-zone" data-zone="gadgets" type="button">Gadgets</button>
+      <button class="scene-zone" data-zone="fashion" type="button">Style</button>
+    </div>
+    <div class="scene-hint" id="scene-hint">Drag anywhere in the scene to look around</div>
   </div>
   <div class="hero-index"><span>01</span><span class="index-line"></span><span>THE SHOWROOM</span></div>
 </section>
